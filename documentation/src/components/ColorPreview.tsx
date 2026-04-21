@@ -63,9 +63,7 @@ export default function ColorPreview({
     // Comments
     if (line.trim().startsWith("--")) {
       return (
-        <span style={{ color: commentColor, fontStyle: "italic" }}>
-          {line}
-        </span>
+        <span style={{ color: commentColor, fontStyle: "italic" }}>{line}</span>
       );
     }
 
@@ -94,19 +92,27 @@ export default function ColorPreview({
       if (segment && i === segment.start) {
         // Push preceding text
         if (i > currentIdx) {
-          parts.push(highlightKeywords(line.slice(currentIdx, i), keywordColor, functionColor));
+          parts.push(
+            highlightKeywords(
+              line.slice(currentIdx, i),
+              keywordColor,
+              functionColor,
+            ),
+          );
         }
         parts.push(
           <span key={`str-${i}`} style={{ color: stringColor }}>
             {line.slice(segment.start, segment.end)}
-          </span>
+          </span>,
         );
         i = segment.end - 1;
         currentIdx = segment.end;
       }
     }
     if (currentIdx < line.length) {
-      parts.push(highlightKeywords(line.slice(currentIdx), keywordColor, functionColor));
+      parts.push(
+        highlightKeywords(line.slice(currentIdx), keywordColor, functionColor),
+      );
     }
 
     return <>{parts}</>;
@@ -165,7 +171,8 @@ export default function ColorPreview({
           color: fg,
           borderRadius: "12px",
           overflow: "hidden",
-          fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+          fontFamily:
+            "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
           fontSize: "13px",
           lineHeight: 1.65,
           boxShadow: `0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)`,
@@ -247,9 +254,7 @@ export default function ColorPreview({
               >
                 {idx + 1}
               </span>
-              <span style={{ whiteSpace: "pre" }}>
-                {renderLine(line, idx)}
-              </span>
+              <span style={{ whiteSpace: "pre" }}>{renderLine(line, idx)}</span>
             </div>
           ))}
         </div>
@@ -261,7 +266,7 @@ export default function ColorPreview({
 function highlightKeywords(
   text: string,
   keywordColor: string,
-  functionColor: string
+  functionColor: string,
 ): React.ReactNode {
   const parts: React.ReactNode[] = [];
   const keywordRegex =
@@ -279,7 +284,7 @@ function highlightKeywords(
         style={{ color: keywordColor, fontWeight: 700 }}
       >
         {match[0]}
-      </span>
+      </span>,
     );
     lastIdx = match.index + match[0].length;
   }

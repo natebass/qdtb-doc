@@ -1,5 +1,5 @@
-import React from 'react';
-import Layout from '@theme/Layout';
+import React from "react";
+import Layout from "@theme/Layout";
 
 export default function ApiDoc({ modData }) {
   if (!modData) return null;
@@ -10,7 +10,7 @@ export default function ApiDoc({ modData }) {
         <h1>{modData.name}</h1>
         {modData.summary && <p className="lead">{modData.summary}</p>}
         {modData.description && <p>{modData.description}</p>}
-        
+
         {modData.items && modData.items.length > 0 && (
           <>
             <h2>Functions</h2>

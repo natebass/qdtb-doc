@@ -2,7 +2,8 @@ natebass:
   name: Nate Bass
   url: https://github.com/natebass
   image_url: https://github.com/natebass.png
-  page: true
+  page:
+    true
     # customize the url of the author page at /blog/authors/<permalink>
     # permalink: '/all-nate-bass-articles'
   socials:

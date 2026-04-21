@@ -3,7 +3,7 @@ packages:
   - nvim-docusaurus
 
 onlyBuiltDependencies:
-  - '@swc/core'
+  - "@swc/core"
   - core-js
   - core-js-pure
   - esbuild

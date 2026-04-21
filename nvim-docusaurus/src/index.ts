@@ -100,7 +100,7 @@ function extractFunctions(source: string): LuaFunction[] {
   for (let i = 0; i < lines.length; i++) {
     // Detect function declarations
     const fnMatch = lines[i].match(
-      /(?:local\s+)?(?:function\s+(\w[\w.:]*)|([\w.]+)\s*=\s*function)\s*\(/
+      /(?:local\s+)?(?:function\s+(\w[\w.:]*)|([\w.]+)\s*=\s*function)\s*\(/,
     );
     if (!fnMatch) continue;
 
@@ -126,9 +126,7 @@ function extractFunctions(source: string): LuaFunction[] {
 
       const content = line.replace(/^-+\s?/, "").trim();
 
-      const paramMatch = content.match(
-        /@param\s+(\w+)\s+(\w+)\s*(.*)/
-      );
+      const paramMatch = content.match(/@param\s+(\w+)\s+(\w+)\s*(.*)/);
       const returnMatch = content.match(/@return\s+(\w+)\s*(.*)/);
 
       if (paramMatch) {
@@ -167,7 +165,7 @@ function extractFunctions(source: string): LuaFunction[] {
 }
 
 function extractVariables(
-  source: string
+  source: string,
 ): { name: string; value: string; description: string }[] {
   const vars: { name: string; value: string; description: string }[] = [];
   const lines = source.split("\n");
@@ -175,11 +173,10 @@ function extractVariables(
   for (let i = 0; i < lines.length; i++) {
     // Match local variable assignments with preceding comments
     const varMatch = lines[i].match(
-      /^(?:local\s+)?(\w+)\s*=\s*(.+?)(?:\s*--.*)?$/
+      /^(?:local\s+)?(\w+)\s*=\s*(.+?)(?:\s*--.*)?$/,
     );
     if (!varMatch) continue;
-    if (lines[i].includes("function") || lines[i].includes("require"))
-      continue;
+    if (lines[i].includes("function") || lines[i].includes("require")) continue;
 
     const name = varMatch[1];
     const value = varMatch[2].trim();
@@ -216,9 +213,7 @@ function extractColors(source: string, fileName: string): ColorScheme {
       // Try to find the variable name or context
       let usage = "";
       const assignMatch = line.match(/(\w+)\s*=.*?#/);
-      const hiMatch = line.match(
-        /(?:hi|nvim_set_hl).*?['"]([\w@.]+)['"]/
-      );
+      const hiMatch = line.match(/(?:hi|nvim_set_hl).*?['"]([\w@.]+)['"]/);
       const commentMatch = line.match(/--\s*(.+)/);
 
       if (assignMatch) usage = assignMatch[1];
@@ -246,27 +241,33 @@ function extractColors(source: string, fileName: string): ColorScheme {
 
   // Extract bg/fg for dark and light
   const bgDarkMatch = source.match(
-    /bg\s*=\s*is_dark\s*and\s*"(#[0-9a-fA-F]{6})"/
+    /bg\s*=\s*is_dark\s*and\s*"(#[0-9a-fA-F]{6})"/,
   );
   const bgLightMatch = source.match(
-    /bg\s*=\s*is_dark\s*and\s*"#[0-9a-fA-F]{6}"\s*or\s*"(#[0-9a-fA-F]{6})"/
+    /bg\s*=\s*is_dark\s*and\s*"#[0-9a-fA-F]{6}"\s*or\s*"(#[0-9a-fA-F]{6})"/,
   );
   const fgDarkMatch = source.match(
-    /fg\s*=\s*is_dark\s*and\s*"(#[0-9a-fA-F]{6})"/
+    /fg\s*=\s*is_dark\s*and\s*"(#[0-9a-fA-F]{6})"/,
   );
   const fgLightMatch = source.match(
-    /fg\s*=\s*is_dark\s*and\s*"#[0-9a-fA-F]{6}"\s*or\s*"(#[0-9a-fA-F]{6})"/
+    /fg\s*=\s*is_dark\s*and\s*"#[0-9a-fA-F]{6}"\s*or\s*"(#[0-9a-fA-F]{6})"/,
   );
 
   const accentMatch = source.match(/accent\s*=\s*"(\w+)"/);
-  const saturationMatch = source.match(/saturation\s*=\s*is_dark\s*and\s*"(\w+)"/);
+  const saturationMatch = source.match(
+    /saturation\s*=\s*is_dark\s*and\s*"(\w+)"/,
+  );
 
   // Separate dark and light colors based on palette naming
   const darkColors: ColorInfo[] = [];
   const lightColors: ColorInfo[] = [];
 
   for (const line of lines) {
-    if (line.includes("palette_dark") || line.includes("bg.") || (line.includes("is_dark") && line.includes("and"))) {
+    if (
+      line.includes("palette_dark") ||
+      line.includes("bg.") ||
+      (line.includes("is_dark") && line.includes("and"))
+    ) {
       const m = line.match(/#[0-9a-fA-F]{6}/);
       if (m) {
         const nameMatch = line.match(/(\w+)\s*=/);
@@ -308,7 +309,6 @@ function extractColors(source: string, fileName: string): ColorScheme {
 }
 
 // ── Markdown Generation ──────────────────────────────────────────────────────
-
 
 function generateModuleMarkdown(mod: LuaModule): string {
   const lines: string[] = [];
@@ -409,11 +409,16 @@ function generateColorSchemeMarkdown(scheme: ColorScheme): string {
     lines.push("| Property | Value |");
     lines.push("|----------|-------|");
     if (scheme.accent) lines.push(`| Accent | \`${scheme.accent}\` |`);
-    if (scheme.saturation) lines.push(`| Saturation | \`${scheme.saturation}\` |`);
-    if (scheme.bgDark) lines.push(`| Background (Dark) | \`${scheme.bgDark}\` |`);
-    if (scheme.bgLight) lines.push(`| Background (Light) | \`${scheme.bgLight}\` |`);
-    if (scheme.fgDark) lines.push(`| Foreground (Dark) | \`${scheme.fgDark}\` |`);
-    if (scheme.fgLight) lines.push(`| Foreground (Light) | \`${scheme.fgLight}\` |`);
+    if (scheme.saturation)
+      lines.push(`| Saturation | \`${scheme.saturation}\` |`);
+    if (scheme.bgDark)
+      lines.push(`| Background (Dark) | \`${scheme.bgDark}\` |`);
+    if (scheme.bgLight)
+      lines.push(`| Background (Light) | \`${scheme.bgLight}\` |`);
+    if (scheme.fgDark)
+      lines.push(`| Foreground (Dark) | \`${scheme.fgDark}\` |`);
+    if (scheme.fgLight)
+      lines.push(`| Foreground (Light) | \`${scheme.fgLight}\` |`);
     lines.push("");
   }
 
@@ -422,7 +427,7 @@ function generateColorSchemeMarkdown(scheme: ColorScheme): string {
     lines.push("## Preview");
     lines.push("");
     lines.push(
-      `<ColorPreview bgDark="${scheme.bgDark}" bgLight="${scheme.bgLight || "#e5e5e5"}" fgDark="${scheme.fgDark}" fgLight="${scheme.fgLight || "#333333"}" name="${scheme.displayName}" />`
+      `<ColorPreview bgDark="${scheme.bgDark}" bgLight="${scheme.bgLight || "#e5e5e5"}" fgDark="${scheme.fgDark}" fgLight="${scheme.fgLight || "#333333"}" name="${scheme.displayName}" />`,
     );
     lines.push("");
   }
@@ -449,13 +454,15 @@ function generateColorSchemeMarkdown(scheme: ColorScheme): string {
 
 function generateIndexMarkdown(
   modules: LuaModule[],
-  colorSchemes: ColorScheme[]
+  colorSchemes: ColorScheme[],
 ): string {
   const lines: string[] = [];
 
   lines.push("---");
   lines.push('title: "Neovim Configuration"');
-  lines.push('description: "Complete documentation for the QDtb Neovim configuration"');
+  lines.push(
+    'description: "Complete documentation for the QDtb Neovim configuration"',
+  );
   lines.push("sidebar_position: 1");
   lines.push("slug: /");
   lines.push("---");
@@ -463,7 +470,7 @@ function generateIndexMarkdown(
   lines.push("# QDtb Neovim Configuration");
   lines.push("");
   lines.push(
-    "Auto-generated documentation from the QDtb Neovim Lua configuration files."
+    "Auto-generated documentation from the QDtb Neovim Lua configuration files.",
   );
   lines.push("");
 
@@ -488,10 +495,13 @@ function generateIndexMarkdown(
     lines.push("| Module | Description |");
     lines.push("|--------|-------------|");
     for (const mod of mods) {
-      const link = mod.category === "colors"
-        ? `colors/${mod.name}`
-        : `${mod.category}/${mod.name}`;
-      lines.push(`| [${mod.moduleName || mod.name}](${link}) | ${mod.summary} |`);
+      const link =
+        mod.category === "colors"
+          ? `colors/${mod.name}`
+          : `${mod.category}/${mod.name}`;
+      lines.push(
+        `| [${mod.moduleName || mod.name}](${link}) | ${mod.summary} |`,
+      );
     }
     lines.push("");
   }
@@ -503,7 +513,7 @@ function generateIndexMarkdown(
     lines.push("|--------|-------------|---------|----------|");
     for (const cs of colorSchemes) {
       lines.push(
-        `| [${cs.displayName}](colors/${cs.name}) | ${cs.description} | \`${cs.bgDark || "—"}\` | \`${cs.bgLight || "—"}\` |`
+        `| [${cs.displayName}](colors/${cs.name}) | ${cs.description} | \`${cs.bgDark || "—"}\` | \`${cs.bgLight || "—"}\` |`,
       );
     }
     lines.push("");
@@ -523,7 +533,7 @@ interface SidebarItem {
 
 function generateSidebar(
   modules: LuaModule[],
-  colorSchemes: ColorScheme[]
+  colorSchemes: ColorScheme[],
 ): SidebarItem[] {
   const sidebar: SidebarItem[] = [
     { type: "doc", label: "Overview", id: "index" },
@@ -589,10 +599,16 @@ function findLuaFiles(dir: string, basePath: string = ""): string[] {
 
     if (entry.isDirectory()) {
       // Skip doc, node_modules, and hidden directories
-      if (["doc", "node_modules", ".git", "domscheme-main"].includes(entry.name))
+      if (
+        ["doc", "node_modules", ".git", "domscheme-main"].includes(entry.name)
+      )
         continue;
       files.push(...findLuaFiles(fullPath, relPath));
-    } else if (entry.name.endsWith(".lua") && entry.name !== "dkjson.lua" && entry.name !== "dump.lua") {
+    } else if (
+      entry.name.endsWith(".lua") &&
+      entry.name !== "dkjson.lua" &&
+      entry.name !== "dump.lua"
+    ) {
       files.push(fullPath);
     }
   }
@@ -602,17 +618,10 @@ function findLuaFiles(dir: string, basePath: string = ""): string[] {
 
 function categorizeFile(filePath: string, qdtbPath: string): string {
   const rel = path.relative(qdtbPath, filePath);
-  if (rel.startsWith("colors/") || rel.startsWith("colors\\"))
-    return "colors";
-  if (
-    rel.startsWith("lua/config/") ||
-    rel.startsWith("lua\\config\\")
-  )
+  if (rel.startsWith("colors/") || rel.startsWith("colors\\")) return "colors";
+  if (rel.startsWith("lua/config/") || rel.startsWith("lua\\config\\"))
     return "config";
-  if (
-    rel.startsWith("lua/plugins/") ||
-    rel.startsWith("lua\\plugins\\")
-  )
+  if (rel.startsWith("lua/plugins/") || rel.startsWith("lua\\plugins\\"))
     return "plugins";
   return "other";
 }
@@ -629,10 +638,9 @@ function getModuleName(filePath: string, qdtbPath: string): string {
 
 export default function nvimDocusaurusPlugin(
   context: LoadContext,
-  options: PluginOptions
+  options: PluginOptions,
 ): Plugin<void> {
-  const qdtbPath =
-    options.qdtbPath ?? path.resolve(context.siteDir, "../qdtb");
+  const qdtbPath = options.qdtbPath ?? path.resolve(context.siteDir, "../qdtb");
   const outputBase = path.resolve(context.siteDir, "docs");
 
   return {
@@ -679,7 +687,8 @@ export default function nvimDocusaurusPlugin(
 
         const mod: LuaModule = {
           name,
-          moduleName: moduleInfo.moduleName || getModuleName(filePath, qdtbPath),
+          moduleName:
+            moduleInfo.moduleName || getModuleName(filePath, qdtbPath),
           summary: moduleInfo.summary || `${name} module`,
           description: moduleInfo.description,
           filePath,
@@ -732,7 +741,7 @@ export default function nvimDocusaurusPlugin(
       console.log(`   📝 Generated: _sidebar.json`);
 
       console.log(
-        `\n✅ nvim-docusaurus: Generated docs for ${modules.length} modules and ${colorSchemes.length} color schemes\n`
+        `\n✅ nvim-docusaurus: Generated docs for ${modules.length} modules and ${colorSchemes.length} color schemes\n`,
       );
     },
 
@@ -742,9 +751,7 @@ export default function nvimDocusaurusPlugin(
       // sidebar configuration.
       const sidebarPath = path.join(outputBase, "_sidebar.json");
       if (fs.existsSync(sidebarPath)) {
-        const sidebarData = JSON.parse(
-          fs.readFileSync(sidebarPath, "utf-8")
-        );
+        const sidebarData = JSON.parse(fs.readFileSync(sidebarPath, "utf-8"));
         // Store in global data so themes can access it
         actions.setGlobalData({
           apiSidebar: sidebarData,

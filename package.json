@@ -1,19 +1,19 @@
 {
-    "workspaces": [
-        "nvim-docusaurus",
-        "documentation"
-    ],
-    "scripts": {
-        "start": "pnpm --filter documentation start",
-        "build": "pnpm --filter documentation build",
-        "swizzle": "pnpm --filter documentation swizzle",
-        "deploy": "pnpm --filter documentation deploy",
-        "clear": "pnpm --filter documentation clear",
-        "serve": "pnpm --filter documentation serve",
-        "write-translations": "pnpm --filter documentation write-translations",
-        "write-heading-ids": "pnpm --filter documentation write-heading-ids",
-        "typecheck": "tsc",
-        "build-plugin": "pnpm --filter nvim-docusaurus build",
-        "watch-plugin": "pnpm --filter nvim-docusaurus watch"
-    }
+  "workspaces": [
+    "nvim-docusaurus",
+    "documentation"
+  ],
+  "scripts": {
+    "start": "pnpm --filter documentation start",
+    "build": "pnpm --filter documentation build",
+    "swizzle": "pnpm --filter documentation swizzle",
+    "deploy": "pnpm --filter documentation deploy",
+    "clear": "pnpm --filter documentation clear",
+    "serve": "pnpm --filter documentation serve",
+    "write-translations": "pnpm --filter documentation write-translations",
+    "write-heading-ids": "pnpm --filter documentation write-heading-ids",
+    "typecheck": "tsc",
+    "build-plugin": "pnpm --filter nvim-docusaurus build",
+    "watch-plugin": "pnpm --filter nvim-docusaurus watch"
+  }
 }

@@ -47,8 +47,6 @@ Welcome to my personal Neovim configuration. It is partly based on [💤 lazy.nv
 
 ![image](https://user-images.githubusercontent.com/292349/213447056-92290767-ea16-430c-8727-ce994c93e9cc.png)
 
-
-
 ## ⚡️ Requirements
 
 - Neovim >= **0.12**
@@ -85,6 +83,3 @@ This project uses the [Neovim Plugin Architecture](https://neovim.io/doc/user/lu
 ## ⚙️ Configuration
 
 Refer to the [docs](https://lazyvim.github.io)
-
-
-
