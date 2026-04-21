@@ -47,7 +47,12 @@ jobs:
         run: pnpm build-plugin
 
       - name: Build website
-        run: pnpm build
+        env:
+          BASE_URL: /${{ github.event.repository.name }}/
+          URL: https://${{ github.repository_owner }}.github.io
+        run: |
+          mkdir -p documentation/docs
+          pnpm build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

@@ -11,8 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: "https://natebass.github.io",
-  baseUrl: "/qdtb-doc/",
+  url: process.env.URL || "https://natebass.github.io",
+  baseUrl: process.env.BASE_URL || "/qdtb-doc/",
   trailingSlash: false,
 
   organizationName: "natebass",
