@@ -3,14 +3,19 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - master
     # Review filter config: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore
     paths-ignore:
       - "README.md"
       - "AGENTS.md"
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -30,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 25
           cache: "pnpm"
 
       - name: Install dependencies

@@ -15,4 +15,6 @@ This repository contains the documentation for my personal Neovim configuration.
 
 ## Get started
 
-Run `ldoc .`.
+1. `pnpm i`
+2. `pnpm build-plugin`
+3. `pnpm serve`
