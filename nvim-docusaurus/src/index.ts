@@ -497,8 +497,8 @@ function generateIndexMarkdown(
     for (const mod of mods) {
       const link =
         mod.category === "colors"
-          ? `./colors/${mod.name}`
-          : `./${mod.category}/${mod.name}`;
+          ? `/docs/colors/${mod.name}`
+          : `/docs/${mod.category}/${mod.name}`;
       lines.push(
         `| [${mod.moduleName || mod.name}](${link}) | ${mod.summary} |`,
       );
@@ -513,7 +513,7 @@ function generateIndexMarkdown(
     lines.push("|--------|-------------|---------|----------|");
     for (const cs of colorSchemes) {
       lines.push(
-        `| [${cs.displayName}](./colors/${cs.name}) | ${cs.description} | \`${cs.bgDark || "—"}\` | \`${cs.bgLight || "—"}\` |`,
+        `| [${cs.displayName}](/docs/colors/${cs.name}) | ${cs.description} | \`${cs.bgDark || "—"}\` | \`${cs.bgLight || "—"}\` |`,
       );
     }
     lines.push("");
