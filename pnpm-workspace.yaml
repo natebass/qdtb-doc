@@ -1,0 +1,12 @@
+packages:
+  - documentation
+  - nvim-docusaurus
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - core-js
+  - core-js-pure
+  - esbuild
+  - msw
+  - protobufjs
+  - sharp
