@@ -5,81 +5,75 @@
 <hr>
 
 <h4 align="center">
-  <a href="https://lazyvim.github.io/installation">Install</a>
+  <a href="https://natebass.github.io/qdtb-doc/docs">Install</a>
   ·
-  <a href="https://lazyvim.github.io/configuration">Configure</a>
+  <a href="https://natebass.github.io/qdtb-doc/docs">Configure</a>
   ·
-  <a href="https://lazyvim.github.io">Docs</a>
+  <a href="https://natebass.github.io/qdtb-doc">Docs</a>
 </h4>
 
 <div align="center"><p>
-    <a href="https://github.com/LazyVim/LazyVim/releases/latest">
-      <img alt="Latest release" src="https://img.shields.io/github/v/release/LazyVim/LazyVim?style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41&include_prerelease&sort=semver" />
+    <a href="https://github.com/natebass/qdtb/pulse">
+      <img alt="Last commit" src="https://img.shields.io/github/last-commit/natebass/qdtb?style=for-the-badge&logo=starship&color=8bd5ca&logoColor=D9E0EE&labelColor=302D41"/>
     </a>
-    <a href="https://github.com/LazyVim/LazyVim/pulse">
-      <img alt="Last commit" src="https://img.shields.io/github/last-commit/LazyVim/LazyVim?style=for-the-badge&logo=starship&color=8bd5ca&logoColor=D9E0EE&labelColor=302D41"/>
+    <a href="https://github.com/natebass/qdtb/blob/master/LICENSE">
+      <img alt="License" src="https://img.shields.io/github/license/natebass/qdtb?style=for-the-badge&logo=starship&color=ee999f&logoColor=D9E0EE&labelColor=302D41" />
     </a>
-    <a href="https://github.com/LazyVim/LazyVim/blob/main/LICENSE">
-      <img alt="License" src="https://img.shields.io/github/license/LazyVim/LazyVim?style=for-the-badge&logo=starship&color=ee999f&logoColor=D9E0EE&labelColor=302D41" />
-    </a>
-    <a href="https://github.com/LazyVim/LazyVim/stargazers">
-      <img alt="Stars" src="https://img.shields.io/github/stars/LazyVim/LazyVim?style=for-the-badge&logo=starship&color=c69ff5&logoColor=D9E0EE&labelColor=302D41" />
-    </a>
-    <a href="https://github.com/LazyVim/LazyVim/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues/LazyVim/LazyVim?style=for-the-badge&logo=bilibili&color=F5E0DC&logoColor=D9E0EE&labelColor=302D41" />
-    </a>
-    <a href="https://github.com/LazyVim/LazyVim">
-      <img alt="Repo Size" src="https://img.shields.io/github/repo-size/LazyVim/LazyVim?color=%23DDB6F2&label=SIZE&logo=codesandbox&style=for-the-badge&logoColor=D9E0EE&labelColor=302D41" />
+    <a href="https://github.com/natebass/qdtb/stargazers">
+      <img alt="Stars" src="https://img.shields.io/github/stars/natebass/qdtb?style=for-the-badge&logo=starship&color=c69ff5&logoColor=D9E0EE&labelColor=302D41" />
     </a>
     <a href="https://natebass.github.io/qdtb-doc/blog">
-      <img src="https://img.shields.io/badge/blog-latest_posts-orange?style=flat-square&logo=rss&logoColor=white" alt="Blog" />
+      <img src="https://img.shields.io/badge/blog-latest_posts-orange?style=for-the-badge&logo=rss&logoColor=white" alt="Blog" />
     </a>
-    <a href="https://natebass.github.io/qdtb-doc">
-      <img src="https://img.shields.io/badge/docs-qdtb-blue?style=flat-square&logo=docusaurus&logoColor=white" alt="Docs" />
-    </a>
-</div>
+</p></div>
 
-# QDtb Neovim configuration documentation
+# QDtb Neovim configuration
 
-Welcome to my personal Neovim configuration. It is partly based on [💤 lazy.nvim](https://github.com/folke/lazy.nvim). It uses mini.nvim plugins extensively.
+Welcome to my personal Neovim configuration. It is partly based on [💤 lazy.nvim](https://github.com/folke/lazy.nvim) and uses mini.nvim plugins.
 
 ![image](https://user-images.githubusercontent.com/292349/211285846-0b7bb3bf-0462-4029-b64c-4ee1d037fc1c.png)
 
-![image](https://user-images.githubusercontent.com/292349/213447056-92290767-ea16-430c-8727-ce994c93e9cc.png)
+## ✨ Features
+
+- 💻 Continue where you left off. Save and resume sessions with **Session Manager**. It uses mhinz/startify and mhinz/session. It loads a start screen by default.
+- 🧹 Sane default settings for options, autocmds, and keymaps.
+- 📦 Comes with a wealth of plugins pre-configured and ready to use.
 
 ## ⚡️ Requirements
 
 - Neovim >= **0.12**
-- a [Nerd Font](https://www.nerdfonts.com/) **_(optional)_**
+- A [Nerd Font](https://www.nerdfonts.com/) **_(recommended)_**
 
-## 🚀 Getting Started
+## 🚀 Getting started
 
 1. Find your nvim configuration directory.
 2. Delete all files in that directory.
 3. Clone this repository into that directory.
 
-> [NOTE]
-> This project is meant to completely override the nvim configuration. Please backup your existing configuration. You can also just take what you want from this repository but copy-pasting individual settings or plugins.
+> [!IMPORTANT]
+> You must manually clone the mini.nvim repository in `{stdpath('data')}/site/pack/core/start/`. Other plugins are automatically installed in {stdpath('data')}/site/pack/core/opt/.
 
-## 📂 File Structure
+## 📂 File structure
 
-This project uses the [Neovim Plugin Architecture](https://neovim.io/doc/user/lua.html#plugin-architecture) **(Not LazyVim package management)**. Installed plugins are located in `~/.local/share/nvim/site/pack/lazy/start/`.
+This project follows a modular structure, separating core configuration from plugin-specific logic.
 
 <pre>
 ~/.config/nvim
-├── lua
-│   ├── config
-│   │   ├── autocmds.lua
-│   │   ├── keymaps.lua
-│   │   ├── lazy.lua
-│   │   └── options.lua
-│   └── plugins
-│       ├── spec1.lua
-│       ├── **
-│       └── spec2.lua
-└── init.lua
+├── 📂 <b>colors</b>/              # Custom colorschemes and generators
+│   ├── miniautumn.lua
+│   ├── minispring.lua
+│   └── neovim_colors.lua
+├── 📂 <b>lua</b>/
+│   ├── 📂 <b>config</b>/          # Core configuration
+│   │   ├── autocmds.lua    # Automatic command definitions
+│   │   ├── keymaps.lua     # Global keybindings
+│   │   ├── mini.lua        # mini.nvim initialization
+│   │   └── options.lua     # Vim options and variables
+│   └── 📂 <b>plugins</b>/         # Modular plugin configs
+│       ├── 📂 <b>code_style</b>/  # Formatting and linting
+│       ├── 📂 <b>fold_this</b>/   # Advanced folding logic
+│       ├── 📂 <b>qdtb</b>/        # Custom utility scripts
+│       └── 📂 <b>session_manager</b>/ # Dashboard and sessions
+├── init.lua                # Main entry point
+└── nvim-pack-lock.json     # Plugin lockfile
 </pre>
-
-## ⚙️ Configuration
-
-Refer to the [docs](https://lazyvim.github.io)
