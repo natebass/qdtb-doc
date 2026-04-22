@@ -12,11 +12,11 @@ const config: Config = {
   },
 
   url: process.env.URL || "https://natebass.github.io",
-  baseUrl: process.env.BASE_URL || "/qdtb-doc/",
+  baseUrl: process.env.BASE_URL || "/QDtb-doc/",
   trailingSlash: false,
 
   organizationName: "natebass",
-  projectName: "qdtb-doc",
+  projectName: "QDtb-doc",
 
   onBrokenLinks: "warn",
 
@@ -111,7 +111,7 @@ const config: Config = {
         },
         { to: "/faq", position: "right", label: "FAQ" },
         {
-          href: "https://github.com/natebass/qdtb",
+          href: "https://github.com/natebass/QDtb",
           label: "GitHub",
           position: "right",
         },
@@ -151,7 +151,7 @@ const config: Config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/natebass/qdtb",
+              href: "https://github.com/natebass/QDtb",
             },
             {
               label: "FAQ",

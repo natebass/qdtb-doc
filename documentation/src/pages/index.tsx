@@ -13,7 +13,7 @@ const plugins = [
     title: "Colorscheme cycler",
     description:
       "Cycle through your exisiting installed color schemes with a keyboard shortcut.",
-    link: "/docs/plugins/qdtb/colorscheme_cycler",
+    link: "/docs/plugins/QDtb/colorscheme_cycler",
   },
   {
     title: "Other plugins",
@@ -27,7 +27,7 @@ const plugins = [
             </Link>
           </li>
           <li>
-            <Link to="/docs/plugins/qdtb">other</Link>
+            <Link to="/docs/plugins/QDtb">other</Link>
           </li>
         </ul>
       </>

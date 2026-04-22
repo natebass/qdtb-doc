@@ -22,7 +22,7 @@ sidebar_label: nvim-docusaurus
 
 ## How it Works
 
-The plugin scans the Neovim configuration directory (typically `qdtb/`) and processes files based on their category:
+The plugin scans the Neovim configuration directory (typically `QDtb/`) and processes files based on their category:
 
 1. **Modules**: It looks for `--@module` annotations to identify documentation entry points.
 2. **Functions**: It parses local and global function declarations, associating them with the preceding comment block.

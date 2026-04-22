@@ -1,28 +1,28 @@
 <div align="center">
-  <img src="https://github.com/natebass/qdtb-doc/blob/master/screenshots/qdtb_logo.jpeg">
+  <img src="https://github.com/natebass/QDtb-doc/blob/master/screenshots/QDtb_logo.jpeg">
 </div>
 
 <hr>
 
 <h4 align="center">
-  <a href="https://natebass.github.io/qdtb-doc/docs">Install</a>
+  <a href="https://natebass.github.io/QDtb-doc/docs">Install</a>
   ·
-  <a href="https://natebass.github.io/qdtb-doc/docs">Configure</a>
+  <a href="https://natebass.github.io/QDtb-doc/docs">Configure</a>
   ·
-  <a href="https://natebass.github.io/qdtb-doc">Docs</a>
+  <a href="https://natebass.github.io/QDtb-doc">Docs</a>
 </h4>
 
 <div align="center"><p>
-    <a href="https://github.com/natebass/qdtb/pulse">
-      <img alt="Last commit" src="https://img.shields.io/github/last-commit/natebass/qdtb?style=for-the-badge&logo=starship&color=8bd5ca&logoColor=D9E0EE&labelColor=302D41"/>
+    <a href="https://github.com/natebass/QDtb/pulse">
+      <img alt="Last commit" src="https://img.shields.io/github/last-commit/natebass/QDtb?style=for-the-badge&logo=starship&color=8bd5ca&logoColor=D9E0EE&labelColor=302D41"/>
     </a>
-    <a href="https://github.com/natebass/qdtb/blob/master/LICENSE">
-      <img alt="License" src="https://img.shields.io/github/license/natebass/qdtb?style=for-the-badge&logo=starship&color=ee999f&logoColor=D9E0EE&labelColor=302D41" />
+    <a href="https://github.com/natebass/QDtb/blob/master/LICENSE">
+      <img alt="License" src="https://img.shields.io/github/license/natebass/QDtb?style=for-the-badge&logo=starship&color=ee999f&logoColor=D9E0EE&labelColor=302D41" />
     </a>
-    <a href="https://github.com/natebass/qdtb/stargazers">
-      <img alt="Stars" src="https://img.shields.io/github/stars/natebass/qdtb?style=for-the-badge&logo=starship&color=c69ff5&logoColor=D9E0EE&labelColor=302D41" />
+    <a href="https://github.com/natebass/QDtb/stargazers">
+      <img alt="Stars" src="https://img.shields.io/github/stars/natebass/QDtb?style=for-the-badge&logo=starship&color=c69ff5&logoColor=D9E0EE&labelColor=302D41" />
     </a>
-    <a href="https://natebass.github.io/qdtb-doc/blog">
+    <a href="https://natebass.github.io/QDtb-doc/blog">
       <img src="https://img.shields.io/badge/blog-latest_posts-orange?style=for-the-badge&logo=rss&logoColor=white" alt="Blog" />
     </a>
 </p></div>
@@ -31,8 +31,8 @@
 
 Welcome to my personal Neovim configuration. It is partly based on [💤 lazy.nvim](https://github.com/folke/lazy.nvim) and uses mini.nvim plugins.
 
-![image](https://raw.githubusercontent.com/natebass/qdtb-doc/refs/heads/master/screenshots/screenshot_01.png)
-![image](https://raw.githubusercontent.com/natebass/qdtb-doc/refs/heads/master/screenshots/screenshot_02.png)
+![image](https://raw.githubusercontent.com/natebass/QDtb-doc/refs/heads/master/screenshots/screenshot_01.png)
+![image](https://raw.githubusercontent.com/natebass/QDtb-doc/refs/heads/master/screenshots/screenshot_02.png)
 
 ## ✨ Features
 
@@ -73,7 +73,7 @@ This project follows a modular structure, separating core configuration from plu
 │   └── 📂 <b>plugins</b>/         # Modular plugin configs
 │       ├── 📂 <b>code_style</b>/  # Formatting and linting
 │       ├── 📂 <b>fold_this</b>/   # Advanced folding logic
-│       ├── 📂 <b>qdtb</b>/        # Custom utility scripts
+│       ├── 📂 <b>QDtb</b>/        # Custom utility scripts
 │       └── 📂 <b>session_manager</b>/ # Dashboard and sessions
 ├── init.lua                # Main entry point
 └── nvim-pack-lock.json     # Plugin lockfile

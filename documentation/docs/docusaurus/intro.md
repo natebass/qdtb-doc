@@ -7,7 +7,7 @@ description: Introduction to the QDtb documentation and development environment.
 
 Welcome to the documentation for the **QDtb** developer environment — a Neovim-centric configuration designed for speed and aesthetic precision.
 
-[Explore Setup](#-quick-commands) | [GitHub](https://github.com/natebass/qdtb)
+[Explore Setup](#-quick-commands) | [GitHub](https://github.com/natebass/QDtb)
 
 ## 🛠️ Infrastructure
 

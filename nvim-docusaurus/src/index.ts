@@ -54,7 +54,7 @@ interface ColorScheme {
 }
 
 interface PluginOptions {
-  qdtbPath?: string;
+  QDtbPath?: string;
   outputDir?: string;
 }
 
@@ -381,7 +381,7 @@ function generateModuleMarkdown(
   lines.push(`${"#".repeat(hLevel + 1)} Source`);
   lines.push("");
   lines.push(
-    `[View Source on GitHub](https://github.com/natebass/qdtb/blob/master/${mod.relativePath})`,
+    `[View Source on GitHub](https://github.com/natebass/QDtb/blob/master/${mod.relativePath})`,
   );
   lines.push("");
 
@@ -444,7 +444,7 @@ function generateConsolidatedConfigMarkdown(modules: LuaModule[]): string {
       }
 
       lines.push(
-        `[View Source on GitHub](https://github.com/natebass/qdtb/blob/master/${mod.relativePath})`,
+        `[View Source on GitHub](https://github.com/natebass/QDtb/blob/master/${mod.relativePath})`,
       );
       lines.push("");
     });
@@ -475,7 +475,7 @@ function generateCategoryIndexMarkdown(
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const sidebarLabel = groupName === "qdtb" ? "QDTB" : "Overview";
+  const sidebarLabel = groupName === "QDtb" ? "QDTB" : "Overview";
 
   lines.push("---");
   lines.push(`title: "${displayName}"`);
@@ -603,7 +603,7 @@ function generateColorSchemeMarkdown(scheme: ColorScheme): string {
   lines.push("## Source");
   lines.push("");
   lines.push(
-    `[View Source on GitHub](https://github.com/natebass/qdtb/blob/master/colors/${scheme.filePath})`,
+    `[View Source on GitHub](https://github.com/natebass/QDtb/blob/master/colors/${scheme.filePath})`,
   );
   lines.push("");
 
@@ -778,7 +778,7 @@ function generateSidebar(
             items: [
               {
                 type: "doc" as const,
-                label: groupName === "qdtb" ? "QDTB" : "Overview",
+                label: groupName === "QDtb" ? "QDTB" : "Overview",
                 id: `${cat}/${groupName}/index`,
               },
               ...info.modules
@@ -843,8 +843,8 @@ function findLuaFiles(dir: string, basePath: string = ""): string[] {
   return files;
 }
 
-function categorizeFile(filePath: string, qdtbPath: string): string {
-  const rel = path.relative(qdtbPath, filePath);
+function categorizeFile(filePath: string, QDtbPath: string): string {
+  const rel = path.relative(QDtbPath, filePath);
   if (rel === "init.lua") return "config"; // Root init.lua is core config
   if (rel.startsWith("colors/") || rel.startsWith("colors\\")) return "colors";
   if (rel.startsWith("lua/config/") || rel.startsWith("lua\\config\\"))
@@ -854,18 +854,18 @@ function categorizeFile(filePath: string, qdtbPath: string): string {
   return "other";
 }
 
-function getModuleName(filePath: string, qdtbPath: string): string {
-  const rel = path.relative(qdtbPath, filePath);
+function getModuleName(filePath: string, QDtbPath: string): string {
+  const rel = path.relative(QDtbPath, filePath);
   return rel
     .replace(/\.lua$/, "")
     .replace(/[\\/]/g, ".")
     .replace(/\.init$/, "");
 }
 
-function getGroupInfo(filePath: string, qdtbPath: string) {
-  const rel = path.relative(qdtbPath, filePath);
+function getGroupInfo(filePath: string, QDtbPath: string) {
+  const rel = path.relative(QDtbPath, filePath);
   const parts = rel.split(path.sep);
-  const category = categorizeFile(filePath, qdtbPath);
+  const category = categorizeFile(filePath, QDtbPath);
 
   // If it's in a subdirectory of plugins or config, use that subdirectory name as group
   if ((category === "plugins" || category === "config") && parts.length >= 4) {
@@ -887,14 +887,14 @@ export default function nvimDocusaurusPlugin(
   context: LoadContext,
   options: PluginOptions,
 ): Plugin<void> {
-  const qdtbPath = options.qdtbPath ?? path.resolve(context.siteDir, "../qdtb");
+  const QDtbPath = options.QDtbPath ?? path.resolve(context.siteDir, "../QDtb");
   const outputBase = path.resolve(context.siteDir, "docs");
 
   return {
     name: "nvim-docusaurus",
 
     async loadContent() {
-      console.log(`\n🔌 nvim-docusaurus: Scanning ${qdtbPath}...`);
+      console.log(`\n🔌 nvim-docusaurus: Scanning ${QDtbPath}...`);
 
       // Clean previous generated docs
       ["colors", "config", "plugins", "other"].forEach((dir) => {
@@ -914,7 +914,7 @@ export default function nvimDocusaurusPlugin(
       fs.mkdirSync(outputBase, { recursive: true });
 
       // Find all Lua files
-      const luaFiles = findLuaFiles(qdtbPath);
+      const luaFiles = findLuaFiles(QDtbPath);
       console.log(`   Found ${luaFiles.length} Lua files`);
 
       const modules: LuaModule[] = [];
@@ -926,10 +926,10 @@ export default function nvimDocusaurusPlugin(
 
       for (const filePath of luaFiles) {
         const source = fs.readFileSync(filePath, "utf-8");
-        const { category, group: groupName } = getGroupInfo(filePath, qdtbPath);
+        const { category, group: groupName } = getGroupInfo(filePath, QDtbPath);
         const fileName = path.basename(filePath);
         const name = path.basename(filePath, ".lua");
-        const relativePath = path.relative(qdtbPath, filePath);
+        const relativePath = path.relative(QDtbPath, filePath);
 
         const moduleInfo = extractModuleInfo(source);
         const functions = extractFunctions(source);
@@ -938,7 +938,7 @@ export default function nvimDocusaurusPlugin(
         const mod: LuaModule = {
           name,
           moduleName:
-            moduleInfo.moduleName || getModuleName(filePath, qdtbPath),
+            moduleInfo.moduleName || getModuleName(filePath, QDtbPath),
           summary: moduleInfo.summary || `${name} module`,
           description: moduleInfo.description,
           filePath,
@@ -1075,7 +1075,7 @@ export default function nvimDocusaurusPlugin(
     },
 
     getPathsToWatch() {
-      return [path.join(qdtbPath, "**/*.lua")];
+      return [path.join(QDtbPath, "**/*.lua")];
     },
   };
 }

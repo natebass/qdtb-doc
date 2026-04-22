@@ -1,7 +1,7 @@
 return {
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/colors/miniautumn.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/colors/miniautumn.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -23,7 +23,7 @@ return {
 	},
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/colors/minigrey.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/colors/minigrey.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -45,7 +45,7 @@ return {
 	},
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/colors/minispring.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/colors/minispring.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -67,7 +67,7 @@ return {
 	},
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/colors/minisummer.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/colors/minisummer.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -89,7 +89,7 @@ return {
 	},
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/colors/miniwinter.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/colors/miniwinter.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -111,7 +111,7 @@ return {
 	},
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/colors/neovim_colors.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/colors/neovim_colors.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -133,7 +133,7 @@ return {
 	},
 	{
 		description = "",
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/init.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/init.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -156,7 +156,7 @@ return {
 		description = [[
 
  Automated behaviors for filetype settings, formatting, etc.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/autocmds.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/config/autocmds.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -180,7 +180,7 @@ return {
 		description = [[
 
  Loads packages, sets up plugins, and includes other configuration files.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/init.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/config/init.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -204,7 +204,7 @@ return {
 		description = [[
 
  Sets up global, leader, and plugin-specific keybindings.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/keymaps.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/config/keymaps.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -228,7 +228,7 @@ return {
 		description = [[
 
  Sets up various mini.* plugins for UI, editing, and utility enhancements.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/mini.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/config/mini.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -252,7 +252,7 @@ return {
 		description = [[
 
  Configures Neovim UI, editing behavior, search, and other core options.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/options.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/config/options.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -276,7 +276,7 @@ return {
 		description = [[
 
  Contains miscellaneous utility functions and commands.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/other.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/config/other.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -300,7 +300,7 @@ return {
 		description = [[
 
  Defines common filetype handlers, formatting rules, and config reloading.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/code_style/all.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/code_style/all.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -325,7 +325,7 @@ return {
 		description = [[
 
  Provides functions to navigate between closed folds.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/fold_this/fold_navigation.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/fold_this/fold_navigation.lua",
 		inferred = true,
 		items = {
 			{
@@ -381,7 +381,7 @@ return {
 		description = [[
 
  Sets up custom folding text, fillchars, and buffer-local folding logic.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/fold_this/fold_this.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/fold_this/fold_this.lua",
 		inferred = true,
 		items = {
 			{
@@ -476,7 +476,7 @@ return {
 		description = [[
 
  Provides a unified setup function for fold_this core logic and navigation.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/fold_this/init.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/fold_this/init.lua",
 		inferred = true,
 		items = {
 			{
@@ -532,20 +532,20 @@ return {
 		description = [[
 
  Automatically saves files when focus is lost or before exiting Vim.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/qdtb/autosave.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/QDtb/autosave.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
 		lineno = 5,
 		mod_name = "autosave",
 		modifiers = {},
-		name = "plugins.qdtb.autosave",
+		name = "plugins.QDtb.autosave",
 		names_hierarchy = {
 			"plugins",
-			"qdtb",
+			"QDtb",
 			"autosave",
 		},
-		package = "plugins.qdtb",
+		package = "plugins.QDtb",
 		sections = {
 			by_name = {},
 		},
@@ -557,7 +557,7 @@ return {
 		description = [[
 
  Allows cycling through available colorschemes in Neovim.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/qdtb/colorscheme_cycler.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/QDtb/colorscheme_cycler.lua",
 		inferred = true,
 		items = {
 			{
@@ -617,13 +617,13 @@ return {
 		lineno = 5,
 		mod_name = "colorscheme_cycler",
 		modifiers = {},
-		name = "plugins.qdtb.colorscheme_cycler",
+		name = "plugins.QDtb.colorscheme_cycler",
 		names_hierarchy = {
 			"plugins",
-			"qdtb",
+			"QDtb",
 			"colorscheme_cycler",
 		},
-		package = "plugins.qdtb",
+		package = "plugins.QDtb",
 		sections = {
 			by_name = {},
 		},
@@ -635,7 +635,7 @@ return {
 		description = [[
 
  Provides a function to format the current Lua buffer using stylua.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/qdtb/lua_format.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/QDtb/lua_format.lua",
 		inferred = true,
 		items = {
 			{
@@ -669,13 +669,13 @@ return {
 		lineno = 5,
 		mod_name = "lua_format",
 		modifiers = {},
-		name = "plugins.qdtb.lua_format",
+		name = "plugins.QDtb.lua_format",
 		names_hierarchy = {
 			"plugins",
-			"qdtb",
+			"QDtb",
 			"lua_format",
 		},
-		package = "plugins.qdtb",
+		package = "plugins.QDtb",
 		sections = {
 			by_name = {},
 		},
@@ -687,7 +687,7 @@ return {
 		description = [[
 
  Detects if the current file is within an NPM project by locating package.json.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/qdtb/package_json.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/QDtb/package_json.lua",
 		inferred = true,
 		items = {
 			{
@@ -719,13 +719,13 @@ return {
 		lineno = 5,
 		mod_name = "package_json",
 		modifiers = {},
-		name = "plugins.qdtb.package_json",
+		name = "plugins.QDtb.package_json",
 		names_hierarchy = {
 			"plugins",
-			"qdtb",
+			"QDtb",
 			"package_json",
 		},
-		package = "plugins.qdtb",
+		package = "plugins.QDtb",
 		sections = {
 			by_name = {},
 		},
@@ -737,7 +737,7 @@ return {
 		description = [[
 
  Sets the terminal window title based on the active Neovim buffer and project.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/qdtb/window_title.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/QDtb/window_title.lua",
 		inferred = true,
 		items = {
 			{
@@ -803,13 +803,13 @@ return {
 		lineno = 5,
 		mod_name = "window_title",
 		modifiers = {},
-		name = "plugins.qdtb.window_title",
+		name = "plugins.QDtb.window_title",
 		names_hierarchy = {
 			"plugins",
-			"qdtb",
+			"QDtb",
 			"window_title",
 		},
-		package = "plugins.qdtb",
+		package = "plugins.QDtb",
 		sections = {
 			by_name = {},
 		},
@@ -821,7 +821,7 @@ return {
 		description = [[
 
  Provides a randomly selected quote about algorithms for the Startify custom footer.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/session_manager/algorithm_quote.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/session_manager/algorithm_quote.lua",
 		inferred = true,
 		items = {
 			{
@@ -886,7 +886,7 @@ return {
 		description = [[
 
  Provides a randomly selected Bible verse for the Startify custom header.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/session_manager/bible_verse.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/session_manager/bible_verse.lua",
 		inferred = true,
 		items = {
 			{
@@ -951,7 +951,7 @@ return {
 		description = [[
 
  Loads the session_manager configuration.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/session_manager/init.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/session_manager/init.lua",
 		inferred = true,
 		items = {},
 		kind = "modules",
@@ -976,7 +976,7 @@ return {
 		description = [[
 
  Configures Startify for session management, custom headers, and bookmarks.]],
-		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/plugins/session_manager/session_manager.lua",
+		file = "/home/nwb/Source/Repos/QDtb-doc/QDtb/lua/plugins/session_manager/session_manager.lua",
 		inferred = true,
 		items = {
 			{

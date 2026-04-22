@@ -3,8 +3,8 @@
 This repository contains the documentation for my personal Neovim configuration.
 
 > [!NOTE]
-> The main repository is [github.com/natebass/qdtb](https://github.com/natebass/qdtb).
-> The code should be periodically kept up to date by manually copy/pasting the code into the `qdtb/` folder.
+> The main repository is [github.com/natebass/QDtb](https://github.com/natebass/QDtb).
+> The code should be periodically kept up to date by manually copy/pasting the code into the `QDtb/` folder.
 
 ## Prerequisites
 

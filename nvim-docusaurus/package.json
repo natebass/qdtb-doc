@@ -1,7 +1,7 @@
 {
   "name": "nvim-docusaurus",
   "version": "0.0.1-alpha.1",
-  "description": "Docusaurus plugin to generate docs from qdtb using ldoc",
+  "description": "Docusaurus plugin to generate docs from QDtb using ldoc",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

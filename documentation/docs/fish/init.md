@@ -17,7 +17,7 @@ sidebar_position: 1
 --- init module.
 --- @module init
 
--- bootstrap qdtb.nvim, QDtb and your plugins
+-- bootstrap QDtb.nvim, QDtb and your plugins
 require("config")
 -- Footer
 -- vim:foldmethod=marker:foldlevel=1
