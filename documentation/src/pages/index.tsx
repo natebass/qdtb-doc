@@ -7,51 +7,226 @@ import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
 
-const features = [
-  {
-    emoji: "⚙️",
-    title: "Core Configuration",
-    description:
-      "Options, keymaps, autocommands — the foundational settings that shape the editing experience.",
-    link: "/docs/config/options",
-  },
+const plugins = [
   {
     emoji: "🎨",
-    title: "Color Schemes",
+    title: "Colorscheme cycler",
     description:
-      "Seasonal mini.hues themes — minigrey, miniautumn, minispring, minisummer, miniwinter — with interactive previews.",
-    link: "/docs/colors/minigrey",
+      "Cycle through your exisiting installed color schemes with a keyboard shortcut.",
+    link: "/docs/plugins/qdtb/colorscheme_cycler",
   },
   {
-    emoji: "🔌",
-    title: "Plugins",
-    description:
-      "Custom utilities: colorscheme cycler, session management, formatting, and more.",
-    link: "/docs",
+    title: "Other plugins",
+    description: (
+      <>
+        Some are still WIP.
+        <ul>
+          <li>
+            <Link to="/docs/plugins/code_style">
+              Language support and code style
+            </Link>
+          </li>
+          <li>
+            <Link to="/docs/plugins/qdtb">other</Link>
+          </li>
+        </ul>
+      </>
+    ),
+    selectable: false,
   },
   {
-    emoji: "📖",
-    title: "Auto-Generated",
-    description:
-      "Documentation is automatically extracted from LDoc annotations in the Lua source files.",
-    link: "/docs",
+    emoji: "🙌",
+    description: (
+      <>
+        <b>Shout out to open-source plugins</b> like{" "}
+        <Link to="https://github.com/echasnovski/mini.nvim">mini.nvim</Link>.
+        For a list of plugins included in QDtb, check out{" "}
+        <Link to="/docs/plugins/all">this page</Link>.
+      </>
+    ),
+    selectable: false,
   },
 ];
+
+const featureCategories = [
+  {
+    grade: 1,
+    categoryTitle: "1. Intended for the public.",
+    features: [
+      {
+        title: "Core Configuration",
+        description:
+          "Curated Vim options, global keymaps, and autocommands that prioritize performance and ergonomics.",
+      },
+      {
+        title: "Smart Window Management",
+        description:
+          "Intelligent window resizing and navigation logic for efficient multi-file workflows.",
+      },
+      {
+        title: "Fuzzy Finding",
+        description:
+          "Deep Telescope integration with custom pickers for project files, grep, and buffer search.",
+      },
+      {
+        title: "LSP & Autocompletion",
+        description:
+          "Automated language server management with Mason and lsp-zero for an IDE-like experience.",
+      },
+      {
+        title: "Git Integration",
+        description:
+          "Real-time hunk tracking and Git interface via Gitsigns and Fugitive.",
+      },
+    ],
+  },
+  {
+    grade: 2,
+    categoryTitle: "2. Probably not useful.",
+    features: [
+      {
+        title: "Colorscheme Cycler",
+        description:
+          "Lua module to rotate through installed themes with on-screen notifications.",
+      },
+      {
+        title: "Seasonal Hues",
+        description:
+          "Dynamic palette shifting based on the current season or time of day.",
+      },
+      {
+        title: "Theme Previews",
+        description:
+          "Interactive UI for previewing mini.hues variations before applying them.",
+      },
+      {
+        title: "Cursor Animations",
+        description:
+          "Subtle feedback animations for mode changes and large cursor jumps.",
+      },
+      {
+        title: "Smooth Scrolling",
+        description:
+          "Fluid window animations and scrolling provided by mini.animate.",
+      },
+    ],
+  },
+  {
+    grade: 3,
+    categoryTitle:
+      "3. definately not useful, these are my own customizations that are specific to me.",
+    features: [
+      {
+        title: "Auto-Docs",
+        description:
+          "Custom pipeline for extracting LDoc annotations into this documentation site.",
+      },
+      {
+        title: "Hardcoded Shortcuts",
+        description:
+          "Environment-specific keybindings for internal project paths and tools.",
+      },
+      {
+        title: "Workspace Switching",
+        description:
+          "Automatic UI reconfiguration based on active repository branch or path.",
+      },
+      {
+        title: "Experimental Hacks",
+        description:
+          "Unstable Lua snippets for testing bleeding-edge Neovim features.",
+      },
+    ],
+  },
+];
+
+function PluginCard({
+  emoji,
+  title,
+  description,
+  link,
+  selectable = true,
+}: {
+  emoji?: string;
+  title: string;
+  description: ReactNode;
+  link?: string;
+  selectable?: boolean;
+}) {
+  const cardContent = (
+    <div
+      className={clsx(
+        styles.PluginCard,
+        !selectable && styles.PluginCardStatic,
+      )}
+      style={{
+        padding: "28px",
+        borderRadius: "14px",
+        border: "1px solid var(--ifm-color-emphasis-200)",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        height: "100%",
+        cursor: selectable ? "pointer" : "default",
+      }}
+    >
+      {emoji && (
+        <div style={{ fontSize: "2rem", marginBottom: "12px" }}>{emoji}</div>
+      )}
+      <h3
+        style={{
+          fontSize: "1.15rem",
+          fontWeight: 700,
+          marginBottom: "8px",
+          letterSpacing: "-0.01em",
+        }}
+      >
+        {title}
+      </h3>
+      <div
+        style={{
+          fontSize: "0.92rem",
+          opacity: 0.75,
+          lineHeight: 1.6,
+          margin: 0,
+        }}
+      >
+        {description}
+      </div>
+    </div>
+  );
+
+  if (selectable && link) {
+    return (
+      <Link
+        to={link}
+        style={{
+          textDecoration: "none",
+          color: "inherit",
+        }}
+      >
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return cardContent;
+}
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
+    <header className={clsx("hero", styles.heroBanner)}>
       <div className="container">
         <div className={styles.heroInner}>
           <Heading as="h1" className="hero__title">
-            {siteConfig.title}
+            Neovim + PowerShell + Fish
           </Heading>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
+          <p className="hero__subtitle">
+            Vim configuration with extra shell goodies.
+          </p>
           <div className={styles.buttons}>
             <Link
               className="button button--secondary button--lg"
-              to="/docs"
+              to="#usefulness-ratings"
               style={{
                 borderRadius: "10px",
                 fontWeight: 600,
@@ -63,7 +238,7 @@ function HomepageHeader() {
                 transition: "all 0.3s ease",
               }}
             >
-              Browse API Documentation →
+              Find something useful →
             </Link>
           </div>
         </div>
@@ -72,64 +247,7 @@ function HomepageHeader() {
   );
 }
 
-function FeatureCard({
-  emoji,
-  title,
-  description,
-  link,
-}: {
-  emoji: string;
-  title: string;
-  description: string;
-  link: string;
-}) {
-  return (
-    <Link
-      to={link}
-      style={{
-        textDecoration: "none",
-        color: "inherit",
-      }}
-    >
-      <div
-        className={styles.featureCard}
-        style={{
-          padding: "28px",
-          borderRadius: "14px",
-          border: "1px solid var(--ifm-color-emphasis-200)",
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          height: "100%",
-          cursor: "pointer",
-        }}
-      >
-        <div style={{ fontSize: "2rem", marginBottom: "12px" }}>{emoji}</div>
-        <h3
-          style={{
-            fontSize: "1.15rem",
-            fontWeight: 700,
-            marginBottom: "8px",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          {title}
-        </h3>
-        <p
-          style={{
-            fontSize: "0.92rem",
-            opacity: 0.75,
-            lineHeight: 1.6,
-            margin: 0,
-          }}
-        >
-          {description}
-        </p>
-      </div>
-    </Link>
-  );
-}
-
 export default function Home(): ReactNode {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
       title="Home"
@@ -137,23 +255,64 @@ export default function Home(): ReactNode {
     >
       <HomepageHeader />
       <main>
-        <section
-          style={{
-            padding: "64px 0",
-          }}
-        >
-          <div className="container">
+        <section style={{ padding: "64px 0" }}>
+          <div className="container" style={{ maxWidth: "1288px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                margin: "0 auto 24px",
+                padding: "0 8px",
+              }}
+            >
+              <h2 style={{ margin: 0 }}>Neovim plugins</h2>
+              <img
+                height={32}
+                width={32}
+                src="img/neovim_outlined.png"
+                alt="Neovim logo"
+              />
+            </div>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: "20px",
-                maxWidth: "1000px",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "24px",
                 margin: "0 auto",
               }}
             >
-              {features.map((feature) => (
-                <FeatureCard key={feature.title} {...feature} />
+              {plugins.map((plugin) => (
+                <PluginCard key={plugin.title} {...plugin} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="usefulness-ratings"
+          style={{
+            padding: "64px 0",
+            borderTop: "1px solid var(--ifm-color-emphasis-200)",
+            scrollMarginTop: "36px",
+          }}
+        >
+          <div className="container" style={{ maxWidth: "1288px" }}>
+            <div style={{ margin: "0 auto" }}>
+              {featureCategories.map((category) => (
+                <div key={category.grade} className={styles.FeatureSection}>
+                  <div className={styles.CategoryTitle}>
+                    {category.categoryTitle}
+                  </div>
+                  <div className={styles.FeatureGrid}>
+                    {category.features.map((feature, idx) => (
+                      <div key={idx} className={styles.FeatureItem}>
+                        <h4>{feature.title}</h4>
+                        <p>{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>

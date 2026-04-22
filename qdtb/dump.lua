@@ -155,7 +155,7 @@ return {
 	{
 		description = [[
 
- Defines Neovim autocommands for filetype settings, formatting, and other automated behaviors.]],
+ Automated behaviors for filetype settings, formatting, etc.]],
 		file = "/home/nwb/Source/Repos/qdtb-doc/qdtb/lua/config/autocmds.lua",
 		inferred = true,
 		items = {},

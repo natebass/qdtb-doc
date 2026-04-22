@@ -3,8 +3,8 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "QDtb",
-  tagline: "Neovim Configuration Documentation",
+  title: "QDtb documentation",
+  tagline: "Personal developer environment documentation",
   favicon: "img/favicon.ico",
 
   future: {
@@ -61,25 +61,55 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: "img/docusaurus-social-card.jpg",
+    image: "img/logo.svg",
     colorMode: {
       defaultMode: "dark",
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: "QDtb",
       logo: {
         alt: "QDtb Logo",
-        src: "img/logo.svg",
+        src: "img/logo.jpeg",
       },
       items: [
-        { to: "/blog", label: "Blog", position: "left" },
+        {
+          to: "/faq",
+          position: "left",
+          html: 'About <span class="badge badge--new">New</span>',
+          activeBaseRegex: "^$", // Never active
+        },
+        {
+          to: "/blog",
+          label: "Blog",
+          position: "left",
+          activeBaseRegex: "^/blog$",
+        },
         {
           type: "docSidebar",
           sidebarId: "configSidebar",
           position: "left",
           label: "Config",
         },
+        {
+          type: "docSidebar",
+          sidebarId: "powershellSidebar",
+          position: "left",
+          label: "PowerShell",
+        },
+        {
+          type: "docSidebar",
+          sidebarId: "fishSidebar",
+          position: "left",
+          label: "Fish",
+        },
+
+        {
+          type: "docSidebar",
+          sidebarId: "docusaurusSidebar",
+          position: "left",
+          label: "Docusaurus",
+        },
+        { to: "/faq", position: "right", label: "FAQ" },
         {
           href: "https://github.com/natebass/qdtb",
           label: "GitHub",
@@ -108,11 +138,11 @@ const config: Config = {
           items: [
             {
               label: "Keymaps",
-              to: "/docs/config/keymaps",
+              to: "/docs/config/index#configkeymaps",
             },
             {
               label: "Options",
-              to: "/docs/config/options",
+              to: "/docs/config/index#configoptions",
             },
           ],
         },
@@ -123,10 +153,13 @@ const config: Config = {
               label: "GitHub",
               href: "https://github.com/natebass/qdtb",
             },
+            {
+              label: "FAQ",
+              to: "/faq",
+            },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} QDtb. Built with Docusaurus + nvim-docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

@@ -3,6 +3,9 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
+// Plugins that should be consolidated into a single markdown file
+const PLUGINS_TO_CONSOLIDATE = ["code_style", "session_manager", "fold_this"];
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 interface LuaFunction {
@@ -310,43 +313,43 @@ function extractColors(source: string, fileName: string): ColorScheme {
 
 // ── Markdown Generation ──────────────────────────────────────────────────────
 
-function generateModuleMarkdown(mod: LuaModule): string {
+// ── Markdown Generation ──────────────────────────────────────────────────────
+
+// ── Markdown Generation ──────────────────────────────────────────────────────
+
+function generateModuleMarkdown(
+  mod: LuaModule,
+  hLevel: number = 1,
+  includeFrontmatter: boolean = true,
+): string {
   const lines: string[] = [];
 
-  lines.push("---");
-  lines.push(`title: "${mod.moduleName || mod.name}"`);
-  lines.push(`description: "${mod.summary}"`);
-  lines.push(`sidebar_label: "${mod.name}"`);
-  lines.push(`sidebar_position: 1`);
-  lines.push("---");
-  lines.push("");
-  lines.push(`# ${mod.moduleName || mod.name}`);
+  if (includeFrontmatter) {
+    lines.push("---");
+    lines.push(`title: "${mod.moduleName || mod.name}"`);
+    lines.push(`description: "${mod.summary}"`);
+    lines.push(`sidebar_label: "${mod.name}"`);
+    lines.push("---");
+    lines.push("");
+  }
+
+  lines.push(`${"#".repeat(hLevel)} ${mod.moduleName || mod.name}`);
   lines.push("");
   if (mod.summary) {
     lines.push(`> ${mod.summary}`);
     lines.push("");
   }
-  if (mod.description) {
-    lines.push(mod.description);
-    lines.push("");
-  }
-  lines.push(`📄 \`${mod.relativePath}\``);
-  lines.push("");
 
   // Functions
   if (mod.functions.length > 0) {
-    lines.push("## Functions");
+    lines.push(`${"#".repeat(hLevel + 1)} Functions`);
     lines.push("");
     for (const fn of mod.functions) {
       const paramStr = fn.params.map((p) => p.name).join(", ");
-      lines.push(`### \`${fn.name}(${paramStr})\``);
+      lines.push(`${"#".repeat(hLevel + 2)} \`${fn.name}(${paramStr})\``);
       lines.push("");
       if (fn.summary) {
         lines.push(fn.summary);
-        lines.push("");
-      }
-      if (fn.description) {
-        lines.push(fn.description);
         lines.push("");
       }
       if (fn.params.length > 0) {
@@ -374,13 +377,168 @@ function generateModuleMarkdown(mod: LuaModule): string {
     }
   }
 
-  // Source Code
-  lines.push("## Source");
+  // Source Code Link
+  lines.push(`${"#".repeat(hLevel + 1)} Source`);
   lines.push("");
-  lines.push("```lua");
-  lines.push(mod.sourceCode);
-  lines.push("```");
+  lines.push(
+    `[View Source on GitHub](https://github.com/natebass/qdtb/blob/master/${mod.relativePath})`,
+  );
   lines.push("");
+
+  return lines.join("\n");
+}
+
+function generateConsolidatedConfigMarkdown(modules: LuaModule[]): string {
+  const lines: string[] = [];
+
+  lines.push("---");
+  lines.push('title: "Core Configuration"');
+  lines.push('description: "Consolidated core configuration for Neovim"');
+  lines.push('sidebar_label: "Core Configuration"');
+  lines.push("---");
+  lines.push("");
+  lines.push("# Core Configuration");
+  lines.push("");
+
+  // Sort: init, mini, options, keymaps, then others
+  const order = ["init", "mini", "options", "keymaps"];
+  const sorted = [...modules].sort((a, b) => {
+    // Root init.lua should ALWAYS be first
+    if (a.relativePath === "init.lua") return -1;
+    if (b.relativePath === "init.lua") return 1;
+
+    const idxA = order.indexOf(a.name);
+    const idxB = order.indexOf(b.name);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  const initMods = sorted.filter((m) => m.name === "init");
+  const miniMod = sorted.find((m) => m.name === "mini");
+
+  if (initMods.length > 0 || miniMod) {
+    lines.push(`## Init & Mini`);
+    lines.push("");
+    const combined = [...initMods];
+    if (miniMod) combined.push(miniMod);
+
+    combined.forEach((mod) => {
+      lines.push(`### ${mod.moduleName || mod.name}`);
+      lines.push("");
+      if (mod.summary) {
+        lines.push(`> ${mod.summary}`);
+        lines.push("");
+      }
+
+      if (mod.functions.length > 0) {
+        lines.push(`#### Functions`);
+        lines.push("");
+        for (const fn of mod.functions) {
+          const paramStr = fn.params.map((p) => p.name).join(", ");
+          lines.push(`##### \`${fn.name}(${paramStr})\``);
+          lines.push("");
+          if (fn.summary) lines.push(fn.summary + "\n\n");
+        }
+      }
+
+      lines.push(
+        `[View Source on GitHub](https://github.com/natebass/qdtb/blob/master/${mod.relativePath})`,
+      );
+      lines.push("");
+    });
+    lines.push("---");
+    lines.push("");
+  }
+
+  // Then others, but put keymaps last among the remaining ones if it exists
+  const remaining = sorted.filter(
+    (m) => m.name !== "init" && m.name !== "mini",
+  );
+  for (const mod of remaining) {
+    lines.push(generateModuleMarkdown(mod, 2, false));
+  }
+
+  return lines.join("\n");
+}
+
+function generateCategoryIndexMarkdown(
+  groupName: string,
+  modules: LuaModule[],
+  category: string,
+): string {
+  const lines: string[] = [];
+
+  // Prettify group name
+  const displayName = groupName
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const sidebarLabel = groupName === "qdtb" ? "QDTB" : "Overview";
+
+  lines.push("---");
+  lines.push(`title: "${displayName}"`);
+  lines.push(`description: "Overview of ${displayName} configuration"`);
+  lines.push(`sidebar_label: "${sidebarLabel}"`);
+  lines.push(`sidebar_position: 1`);
+  lines.push("---");
+  lines.push("");
+  lines.push(`# ${displayName}`);
+  lines.push("");
+  lines.push(`Documentation for modules in the \`${groupName}\` folder.`);
+  lines.push("");
+  lines.push("| Module | Description |");
+  lines.push("|--------|-------------|");
+  for (const mod of modules.sort((a, b) => a.name.localeCompare(b.name))) {
+    // Relative link from /docs/category/groupName to /docs/category/groupName/modName
+    lines.push(`| [${mod.name}](${groupName}/${mod.name}) | ${mod.summary} |`);
+  }
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+function generateConsolidatedModuleMarkdown(
+  groupName: string,
+  modules: LuaModule[],
+): string {
+  const lines: string[] = [];
+  const displayName = groupName
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  lines.push("---");
+  lines.push(`title: "${displayName}"`);
+  lines.push(`description: "Documentation for the ${displayName} plugin"`);
+  lines.push(`sidebar_label: "${displayName}"`);
+  lines.push("---");
+  lines.push("");
+
+  if (modules.length === 1) {
+    const mod = modules[0];
+    const content = generateModuleMarkdown(mod, 1, false);
+    const contentLines = content.split("\n");
+    // Replace the first header line with the display name
+    contentLines[0] = `# ${displayName}`;
+    lines.push(contentLines.join("\n"));
+  } else {
+    lines.push(`# ${displayName}`);
+    lines.push("");
+
+    const sorted = [...modules].sort((a, b) => {
+      if (a.name === "init" || a.name === "all") return -1;
+      if (b.name === "init" || b.name === "all") return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    for (const mod of sorted) {
+      lines.push(generateModuleMarkdown(mod, 2, false));
+      lines.push("");
+      lines.push("---");
+      lines.push("");
+    }
+  }
 
   return lines.join("\n");
 }
@@ -441,19 +599,22 @@ function generateColorSchemeMarkdown(scheme: ColorScheme): string {
     lines.push("");
   }
 
-  // Source
+  // Source Link
   lines.push("## Source");
   lines.push("");
-  lines.push("```lua");
-  lines.push(scheme.rawSource);
-  lines.push("```");
+  lines.push(
+    `[View Source on GitHub](https://github.com/natebass/qdtb/blob/master/colors/${scheme.filePath})`,
+  );
   lines.push("");
 
   return lines.join("\n");
 }
 
 function generateIndexMarkdown(
-  modules: LuaModule[],
+  groups: Map<
+    string,
+    { category: string; groupName: string; modules: LuaModule[] }
+  >,
   colorSchemes: ColorScheme[],
 ): string {
   const lines: string[] = [];
@@ -474,12 +635,12 @@ function generateIndexMarkdown(
   );
   lines.push("");
 
-  // Group modules by category
-  const categories = new Map<string, LuaModule[]>();
-  for (const mod of modules) {
-    const cat = mod.category || "other";
-    if (!categories.has(cat)) categories.set(cat, []);
-    categories.get(cat)!.push(mod);
+  // Group by category
+  const categories = new Map<string, string[]>();
+  for (const [groupKey, info] of groups) {
+    if (info.category === "colors") continue;
+    if (!categories.has(info.category)) categories.set(info.category, []);
+    categories.get(info.category)!.push(groupKey);
   }
 
   const categoryLabels: Record<string, string> = {
@@ -489,19 +650,35 @@ function generateIndexMarkdown(
     other: "📦 Other",
   };
 
-  for (const [cat, mods] of categories) {
+  for (const [cat, groupKeys] of categories) {
     lines.push(`## ${categoryLabels[cat] || cat}`);
     lines.push("");
-    lines.push("| Module | Description |");
-    lines.push("|--------|-------------|");
-    for (const mod of mods) {
-      const link =
-        mod.category === "colors"
-          ? `/docs/colors/${mod.name}`
-          : `/docs/${mod.category}/${mod.name}`;
-      lines.push(
-        `| [${mod.moduleName || mod.name}](${link}) | ${mod.summary} |`,
-      );
+    lines.push("| Page | Modules |");
+    lines.push("|------|---------|");
+    for (const groupKey of groupKeys.sort()) {
+      const info = groups.get(groupKey)!;
+      const groupName = info.groupName;
+      const displayName = groupName
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
+      const isFolder =
+        info.modules.length > 1 || info.modules[0].name !== groupName;
+
+      const link = isFolder
+        ? `${info.category}/${groupName}/index`
+        : `${info.category}/${groupName}`;
+
+      const modulesList = info.modules
+        .map((m) => {
+          const mLink = isFolder
+            ? `${info.category}/${groupName}/${m.name}`
+            : `${info.category}/${groupName}`;
+          return `[${m.name}](${mLink})`;
+        })
+        .join(", ");
+
+      lines.push(`| [${displayName}](${link}) | ${modulesList} |`);
     }
     lines.push("");
   }
@@ -511,9 +688,11 @@ function generateIndexMarkdown(
     lines.push("");
     lines.push("| Scheme | Description | Dark BG | Light BG |");
     lines.push("|--------|-------------|---------|----------|");
-    for (const cs of colorSchemes) {
+    for (const cs of colorSchemes.sort((a, b) =>
+      a.displayName.localeCompare(b.displayName),
+    )) {
       lines.push(
-        `| [${cs.displayName}](/docs/colors/${cs.name}) | ${cs.description} | \`${cs.bgDark || "—"}\` | \`${cs.bgLight || "—"}\` |`,
+        `| [${cs.displayName}](colors/${cs.name}) | ${cs.description} | \`${cs.bgDark || "—"}\` | \`${cs.bgLight || "—"}\` |`,
       );
     }
     lines.push("");
@@ -532,7 +711,10 @@ interface SidebarItem {
 }
 
 function generateSidebar(
-  modules: LuaModule[],
+  groups: Map<
+    string,
+    { category: string; groupName: string; modules: LuaModule[] }
+  >,
   colorSchemes: ColorScheme[],
 ): SidebarItem[] {
   const sidebar: SidebarItem[] = [
@@ -540,12 +722,12 @@ function generateSidebar(
   ];
 
   // Group by category
-  const categories = new Map<string, LuaModule[]>();
-  for (const mod of modules) {
-    if (mod.category === "colors") continue; // handled separately
-    const cat = mod.category || "other";
-    if (!categories.has(cat)) categories.set(cat, []);
-    categories.get(cat)!.push(mod);
+  const categoryGroups = new Map<string, string[]>();
+  for (const [groupKey, info] of groups) {
+    if (info.category === "colors") continue;
+    if (!categoryGroups.has(info.category))
+      categoryGroups.set(info.category, []);
+    categoryGroups.get(info.category)!.push(groupKey);
   }
 
   const categoryConfig: Record<string, { label: string; emoji: string }> = {
@@ -554,19 +736,62 @@ function generateSidebar(
     other: { label: "Other Modules", emoji: "📦" },
   };
 
-  for (const [cat, mods] of categories) {
+  for (const [cat, groupKeys] of categoryGroups) {
     const conf = categoryConfig[cat] || {
       label: cat,
       emoji: "📄",
     };
+
+    if (cat === "config") {
+      sidebar.push({
+        type: "doc",
+        label: `${conf.emoji} ${conf.label}`,
+        id: "config/index",
+      });
+      continue;
+    }
+
     sidebar.push({
       type: "category",
       label: `${conf.emoji} ${conf.label}`,
-      items: mods.map((m) => ({
-        type: "doc" as const,
-        label: m.name,
-        id: `${cat}/${m.name}`,
-      })),
+      items: groupKeys.sort().map((groupKey) => {
+        const info = groups.get(groupKey)!;
+        const groupName = info.groupName;
+        const displayName = groupName
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+
+        const isFolder =
+          (info.modules.length > 1 || info.modules[0].name !== groupName) &&
+          !(cat === "plugins" && PLUGINS_TO_CONSOLIDATE.includes(groupName));
+
+        if (!isFolder) {
+          return {
+            type: "doc" as const,
+            label: displayName,
+            id: `${cat}/${groupName}`,
+          };
+        } else {
+          return {
+            type: "category",
+            label: displayName,
+            items: [
+              {
+                type: "doc" as const,
+                label: groupName === "qdtb" ? "QDTB" : "Overview",
+                id: `${cat}/${groupName}/index`,
+              },
+              ...info.modules
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((m) => ({
+                  type: "doc" as const,
+                  label: m.name,
+                  id: `${cat}/${groupName}/${m.name}`,
+                })),
+            ],
+          };
+        }
+      }),
     });
   }
 
@@ -575,11 +800,13 @@ function generateSidebar(
     sidebar.push({
       type: "category",
       label: "🎨 Color Schemes",
-      items: colorSchemes.map((cs) => ({
-        type: "doc" as const,
-        label: cs.displayName,
-        id: `colors/${cs.name}`,
-      })),
+      items: colorSchemes
+        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+        .map((cs) => ({
+          type: "doc" as const,
+          label: cs.displayName,
+          id: `colors/${cs.name}`,
+        })),
     });
   }
 
@@ -618,6 +845,7 @@ function findLuaFiles(dir: string, basePath: string = ""): string[] {
 
 function categorizeFile(filePath: string, qdtbPath: string): string {
   const rel = path.relative(qdtbPath, filePath);
+  if (rel === "init.lua") return "config"; // Root init.lua is core config
   if (rel.startsWith("colors/") || rel.startsWith("colors\\")) return "colors";
   if (rel.startsWith("lua/config/") || rel.startsWith("lua\\config\\"))
     return "config";
@@ -632,6 +860,25 @@ function getModuleName(filePath: string, qdtbPath: string): string {
     .replace(/\.lua$/, "")
     .replace(/[\\/]/g, ".")
     .replace(/\.init$/, "");
+}
+
+function getGroupInfo(filePath: string, qdtbPath: string) {
+  const rel = path.relative(qdtbPath, filePath);
+  const parts = rel.split(path.sep);
+  const category = categorizeFile(filePath, qdtbPath);
+
+  // If it's in a subdirectory of plugins or config, use that subdirectory name as group
+  if ((category === "plugins" || category === "config") && parts.length >= 4) {
+    return { category, group: parts[2] };
+  }
+
+  // Consolidate top-level config files
+  if (category === "config") {
+    return { category, group: "index" };
+  }
+
+  // Default: group is just the filename
+  return { category, group: path.basename(filePath, ".lua") };
 }
 
 // ── Plugin ───────────────────────────────────────────────────────────────────
@@ -650,7 +897,6 @@ export default function nvimDocusaurusPlugin(
       console.log(`\n🔌 nvim-docusaurus: Scanning ${qdtbPath}...`);
 
       // Clean previous generated docs
-      // Clean previous generated docs (specific folders only to be safe)
       ["colors", "config", "plugins", "other"].forEach((dir) => {
         const p = path.join(outputBase, dir);
         if (fs.existsSync(p)) {
@@ -673,10 +919,14 @@ export default function nvimDocusaurusPlugin(
 
       const modules: LuaModule[] = [];
       const colorSchemes: ColorScheme[] = [];
+      const groups = new Map<
+        string,
+        { category: string; groupName: string; modules: LuaModule[] }
+      >();
 
       for (const filePath of luaFiles) {
         const source = fs.readFileSync(filePath, "utf-8");
-        const category = categorizeFile(filePath, qdtbPath);
+        const { category, group: groupName } = getGroupInfo(filePath, qdtbPath);
         const fileName = path.basename(filePath);
         const name = path.basename(filePath, ".lua");
         const relativePath = path.relative(qdtbPath, filePath);
@@ -701,6 +951,13 @@ export default function nvimDocusaurusPlugin(
 
         modules.push(mod);
 
+        // Handle grouping with a composite key to avoid collisions between categories
+        const groupKey = `${category}/${groupName}`;
+        if (!groups.has(groupKey)) {
+          groups.set(groupKey, { category, groupName, modules: [] });
+        }
+        groups.get(groupKey)!.modules.push(mod);
+
         // For color files, also extract color data
         if (category === "colors") {
           const scheme = extractColors(source, fileName);
@@ -708,51 +965,109 @@ export default function nvimDocusaurusPlugin(
         }
       }
 
-      // Generate markdown files
-      for (const mod of modules) {
-        if (mod.category === "colors") {
-          // Color schemes get special treatment
-          const scheme = colorSchemes.find((s) => s.name === mod.name);
-          if (scheme) {
-            const outDir = path.join(outputBase, "colors");
-            fs.mkdirSync(outDir, { recursive: true });
-            const outFile = path.join(outDir, `${mod.name}.mdx`);
-            fs.writeFileSync(outFile, generateColorSchemeMarkdown(scheme));
-            console.log(`   📝 Generated: colors/${mod.name}.mdx`);
+      // Generate markdown files for groups
+      for (const [groupKey, info] of groups) {
+        if (info.category === "colors") {
+          // Color schemes get special treatment (still 1-to-1)
+          for (const mod of info.modules) {
+            const scheme = colorSchemes.find((s) => s.name === mod.name);
+            if (scheme) {
+              const outDir = path.join(outputBase, "colors");
+              fs.mkdirSync(outDir, { recursive: true });
+              const outFile = path.join(outDir, `${mod.name}.mdx`);
+              fs.writeFileSync(outFile, generateColorSchemeMarkdown(scheme));
+              console.log(`   📝 Generated: colors/${mod.name}.mdx`);
+            }
           }
-        } else {
-          const outDir = path.join(outputBase, mod.category);
+        } else if (info.category === "config" && info.groupName === "index") {
+          // Consolidated core configuration
+          const outDir = path.join(outputBase, "config");
           fs.mkdirSync(outDir, { recursive: true });
-          const outFile = path.join(outDir, `${mod.name}.md`);
-          fs.writeFileSync(outFile, generateModuleMarkdown(mod));
-          console.log(`   📝 Generated: ${mod.category}/${mod.name}.md`);
+          const outFile = path.join(outDir, `index.md`);
+          fs.writeFileSync(
+            outFile,
+            generateConsolidatedConfigMarkdown(info.modules),
+          );
+          console.log(`   📝 Generated: config/index.md (consolidated)`);
+        } else {
+          const outDir = path.join(outputBase, info.category);
+          fs.mkdirSync(outDir, { recursive: true });
+
+          const isFolder =
+            (info.modules.length > 1 ||
+              info.modules[0].name !== info.groupName) &&
+            !(
+              info.category === "plugins" &&
+              PLUGINS_TO_CONSOLIDATE.includes(info.groupName)
+            );
+
+          if (
+            info.category === "plugins" &&
+            PLUGINS_TO_CONSOLIDATE.includes(info.groupName)
+          ) {
+            const outFile = path.join(outDir, `${info.groupName}.md`);
+            fs.writeFileSync(
+              outFile,
+              generateConsolidatedModuleMarkdown(info.groupName, info.modules),
+            );
+            console.log(
+              `   📝 Generated: ${info.category}/${info.groupName}.md (consolidated)`,
+            );
+          } else if (!isFolder) {
+            const mod = info.modules[0];
+            const outFile = path.join(outDir, `${mod.name}.md`);
+            fs.writeFileSync(outFile, generateModuleMarkdown(mod));
+            console.log(`   📝 Generated: ${info.category}/${mod.name}.md`);
+          } else {
+            const groupDir = path.join(outDir, info.groupName);
+            fs.mkdirSync(groupDir, { recursive: true });
+
+            // Generate individual pages
+            for (const mod of info.modules) {
+              const outFile = path.join(groupDir, `${mod.name}.md`);
+              fs.writeFileSync(outFile, generateModuleMarkdown(mod));
+              console.log(
+                `   📝 Generated: ${info.category}/${info.groupName}/${mod.name}.md`,
+              );
+            }
+
+            // Generate index.md for the group
+            const indexFile = path.join(groupDir, "index.md");
+            fs.writeFileSync(
+              indexFile,
+              generateCategoryIndexMarkdown(
+                info.groupName,
+                info.modules,
+                info.category,
+              ),
+            );
+            console.log(
+              `   📝 Generated: ${info.category}/${info.groupName}/index.md`,
+            );
+          }
         }
       }
 
       // Generate index
       const indexFile = path.join(outputBase, "index.md");
-      fs.writeFileSync(indexFile, generateIndexMarkdown(modules, colorSchemes));
+      fs.writeFileSync(indexFile, generateIndexMarkdown(groups, colorSchemes));
       console.log(`   📝 Generated: index.md`);
 
       // Generate sidebar data for the plugin
-      const sidebarItems = generateSidebar(modules, colorSchemes);
+      const sidebarItems = generateSidebar(groups, colorSchemes);
       const sidebarFile = path.join(outputBase, "_sidebar.json");
       fs.writeFileSync(sidebarFile, JSON.stringify(sidebarItems, null, 2));
       console.log(`   📝 Generated: _sidebar.json`);
 
       console.log(
-        `\n✅ nvim-docusaurus: Generated docs for ${modules.length} modules and ${colorSchemes.length} color schemes\n`,
+        `\n✅ nvim-docusaurus: Generated docs for ${modules.length} modules (${groups.size} groups) and ${colorSchemes.length} color schemes\n`,
       );
     },
 
     async contentLoaded({ actions }) {
-      // The docs are generated as markdown files so the standard
-      // plugin-content-docs handles them. We just need to add the
-      // sidebar configuration.
       const sidebarPath = path.join(outputBase, "_sidebar.json");
       if (fs.existsSync(sidebarPath)) {
         const sidebarData = JSON.parse(fs.readFileSync(sidebarPath, "utf-8"));
-        // Store in global data so themes can access it
         actions.setGlobalData({
           apiSidebar: sidebarData,
         });
@@ -760,7 +1075,6 @@ export default function nvimDocusaurusPlugin(
     },
 
     getPathsToWatch() {
-      // Watch all Lua files in qdtb for hot reload
       return [path.join(qdtbPath, "**/*.lua")];
     },
   };

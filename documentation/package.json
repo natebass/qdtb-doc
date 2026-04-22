@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Documentation website for QDtb Neovim configuration.",
   "scripts": {
-    "start": "docusaurus start",
+    "start": "docusaurus start --no-open",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
