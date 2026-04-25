@@ -5,39 +5,15 @@ import styles from "./faq.module.css";
 
 const faqs = [
   {
-    question: "🚀 What is QDtb?",
-    answer: (
-      <>
-        QDtb (Quick Development Toolbox) is a personal developer environment
-        configuration. It bridges the gap between a highly customized Neovim
-        setup and modern shell environments like PowerShell and Fish.
-      </>
-    ),
+    question: "What is QDtb?",
+    answer: <>QDtb is a personal developer environment configuration.</>,
   },
   {
-    question: "🛠️ Why Neovim, PowerShell, and Fish?",
-    answer: (
-      <>
-        Each tool serves a specific purpose: Neovim for world-class text
-        editing, PowerShell for robust scripting and object-based data handling,
-        and Fish for an out-of-the-box user-friendly shell experience on
-        Linux/macOS.
-      </>
-    ),
+    question: "Is AI used.",
+    answer: <>Yes.</>,
   },
   {
-    question: "🌍 Is this configuration intended for public use?",
-    answer: (
-      <>
-        While many parts of the configuration are modular and can be useful to
-        others, QDtb is primarily a personal project. We categorize features by
-        "Utility Grade" to help you identify which parts are generally
-        applicable versus author-specific.
-      </>
-    ),
-  },
-  {
-    question: "📖 How is the documentation generated?",
+    question: "How is the documentation generated?",
     answer: (
       <>
         The Neovim API documentation is automatically extracted from LDoc
@@ -47,7 +23,16 @@ const faqs = [
     ),
   },
   {
-    question: "🤝 Can I contribute?",
+    question: "Is this configuration intended for public use?",
+    answer: (
+      <>
+        While many parts of the configuration are modular and can be useful to
+        others, QDtb is primarily a personal project.
+      </>
+    ),
+  },
+  {
+    question: "Can I contribute?",
     answer: (
       <>
         Since this is a personal configuration, contributions are generally not
@@ -90,7 +75,7 @@ export default function FAQ(): ReactNode {
       <main className={styles.faqContainer}>
         <div className={styles.faqHeader}>
           <Heading as="h1">Frequently Asked Questions</Heading>
-          <p>Everything you need to know about the QDtb ecosystem.</p>
+          <p>Everything you need to know about the QDtb project.</p>
         </div>
         <div className={styles.faqList}>
           {faqs.map((faq, idx) => (

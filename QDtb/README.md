@@ -5,11 +5,11 @@
 <hr>
 
 <h4 align="center">
-  <a href="https://natebass.github.io/qdtb-doc/docs">Install</a>
+  <a href="https://natebass.github.io/QDtb-doc/docs">Install</a>
   ·
-  <a href="https://natebass.github.io/qdtb-doc/docs">Configure</a>
+  <a href="https://natebass.github.io/QDtb-doc/docs">Configure</a>
   ·
-  <a href="https://natebass.github.io/qdtb-doc">Docs</a>
+  <a href="https://natebass.github.io/QDtb-doc">Docs</a>
 </h4>
 
 <div align="center"><p>
@@ -22,7 +22,7 @@
     <a href="https://github.com/natebass/QDtb/stargazers">
       <img alt="Stars" src="https://img.shields.io/github/stars/natebass/QDtb?style=for-the-badge&logo=starship&color=c69ff5&logoColor=D9E0EE&labelColor=302D41" />
     </a>
-    <a href="https://natebass.github.io/qdtb-doc/blog">
+    <a href="https://natebass.github.io/QDtb-doc/blog">
       <img src="https://img.shields.io/badge/blog-latest_posts-orange?style=for-the-badge&logo=rss&logoColor=white" alt="Blog" />
     </a>
 </p></div>
