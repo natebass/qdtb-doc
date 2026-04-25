@@ -64,7 +64,7 @@ const config: Config = {
       },
       items: [
         {
-          to: "/faq",
+          to: "/faq#what-is-qdtb",
           position: "left",
           html: 'About <span class="badge badge--new">New</span>',
           activeBaseRegex: "^$", // Never active
