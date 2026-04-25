@@ -6,29 +6,22 @@ const config: Config = {
   title: "QDtb documentation",
   tagline: "Personal developer environment documentation",
   favicon: "img/favicon.ico",
-
   future: {
     v4: true,
   },
-
   url: process.env.URL || "https://natebass.github.io",
-  baseUrl: process.env.BASE_URL || "/QDtb-doc/",
+  baseUrl: process.env.BASE_URL || "/qdtb-doc/",
   trailingSlash: false,
-
   organizationName: "natebass",
   projectName: "QDtb-doc",
-
   onBrokenLinks: "warn",
-
   markdown: {
     format: "detect",
   },
-
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
   },
-
   presets: [
     [
       "classic",
@@ -47,7 +40,6 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-
   plugins: [
     "nvim-docusaurus",
     function addLuaPrismLanguage() {
@@ -59,7 +51,6 @@ const config: Config = {
       };
     },
   ],
-
   themeConfig: {
     image: "img/logo.svg",
     colorMode: {
