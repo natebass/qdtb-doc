@@ -6,34 +6,40 @@ import styles from "./faq.module.css";
 const faqs = [
   {
     question: "What is QDtb?",
-    answer: <>QDtb is a personal developer environment configuration.</>,
+    answer: (
+      <>
+        QDtb is an opinionated configuration for Neovim, PowerShell, and fish.
+      </>
+    ),
     slug: "what-is-qdtb",
   },
   {
-    question: "Is AI used.",
+    question: "Is AI used?",
     answer: <>Yes.</>,
-    slug: "is-ai-used",
-  },
-  {
-    question: "How is the documentation generated?",
-    answer: (
-      <>
-        The Neovim API documentation is automatically extracted from LDoc
-        annotations within the Lua source files. This ensures that the
-        documentation stays in sync with the actual implementation.
-      </>
-    ),
-    slug: "how-is-the-documentation-generated",
+    slug: "ai",
   },
   {
     question: "Is this configuration intended for public use?",
     answer: (
       <>
-        While many parts of the configuration are modular and can be useful to
-        others, QDtb is primarily a personal project.
+        Not really, and I caution against blindly installing code that has shell
+        access like this. When Neovim plugins and PowerShell modules are ready
+        for the public they will be published as seperate repositories to
+        GitHub.
       </>
     ),
-    slug: "is-this-configuration-intended-for-public-use",
+    slug: "public-use",
+  },
+  {
+    question: "How is the documentation generated?",
+    answer: (
+      <>
+        The Lua documentation is automatically extracted from LDoc annotations
+        with a local Docusaurus plugin called nvim-docusaurus. This is a custom
+        hack and is not useful outside of this repository.
+      </>
+    ),
+    slug: "generated-documentation",
   },
   {
     question: "Can I contribute?",
@@ -45,6 +51,35 @@ const faqs = [
       </>
     ),
     slug: "can-i-contribute",
+  },
+  {
+    question: "Privacy",
+    answer: (
+      <ul>
+        <li>
+          It installs WakaTime. See https://wakatime.com/legal/privacy-policy.
+        </li>
+        <li>
+          It installs GitHub Copilot for Vim and Neovim. See
+          https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy.
+        </li>
+        <li>
+          Other plugins (custom and third-party) do not track users or collect
+          data.
+        </li>
+      </ul>
+    ),
+    slug: "privacy",
+  },
+  {
+    question: "Security",
+    answer: (
+      <>
+        If you notice any security concerns (like if I leaked my credentials) I
+        would appreciate it if you emailed me at nate.bass@outlook.com.
+      </>
+    ),
+    slug: "security",
   },
 ];
 

@@ -93,13 +93,6 @@ const config: Config = {
           position: "left",
           label: "Fish",
         },
-
-        {
-          type: "docSidebar",
-          sidebarId: "docusaurusSidebar",
-          position: "left",
-          label: "Docusaurus",
-        },
         { to: "/faq", position: "right", label: "FAQ" },
         {
           href: "https://github.com/natebass/QDtb",

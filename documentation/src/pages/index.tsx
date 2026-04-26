@@ -4,6 +4,8 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./index.module.css";
 
@@ -224,6 +226,22 @@ function HomepageHeader() {
             Vim configuration with extra shell goodies.
           </p>
           <div className={styles.buttons}>
+            <Link
+              className="button button--secondary button--lg"
+              to="https://github.com/natebass/QDtb"
+              style={{
+                borderRadius: "10px",
+                fontWeight: 600,
+                padding: "12px 32px",
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#e0e7ff",
+                transition: "all 0.3s ease",
+              }}
+            >
+              View on GitHub <FontAwesomeIcon icon={faGithub} />
+            </Link>
             <Link
               className="button button--secondary button--lg"
               to="#usefulness-ratings"
