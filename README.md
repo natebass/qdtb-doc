@@ -1,6 +1,6 @@
 # QDtb Neovim configuration documentation
 
-This repository contains the documentation for my personal Neovim configuration.
+This repository contains the _documentation_ for my personal Neovim configuration.
 
 > [!NOTE]
 > The main repository is [github.com/natebass/QDtb](https://github.com/natebass/QDtb).
@@ -8,8 +8,8 @@ This repository contains the documentation for my personal Neovim configuration.
 
 ## Prerequisites
 
-- lua
-- luarocks
+- Lua
+- LuaRocks
 - LDoc
 - Node.js
 - PNPM
