@@ -10,7 +10,7 @@ This repository contains the documentation for my personal Neovim configuration.
 
 - lua
 - luarocks
-- ldoc
+- LDoc
 - Node.js
 - PNPM
 
