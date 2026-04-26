@@ -18,5 +18,4 @@ This repository contains the documentation for my personal Neovim configuration.
 
 1. `pnpm i`
 2. `pnpm build-plugin`
-3. `pnpm build`
-4. `pnpm serve`
+3. `pnpm start`
