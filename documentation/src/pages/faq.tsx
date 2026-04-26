@@ -31,11 +31,10 @@ const faqs = [
     slug: "public-use",
   },
   {
-    question: "How is the documentation generated?",
+    question: "How is the Lua documentation generated?",
     answer: (
       <>
-        The Lua documentation is automatically extracted from LDoc annotations
-        with a local Docusaurus plugin called nvim-docusaurus. This is a custom
+        LDoc annotations are parsed with a local Docusaurus plugin called nvim-docusaurus. This is a custom
         hack and is not useful outside of this repository.
       </>
     ),
