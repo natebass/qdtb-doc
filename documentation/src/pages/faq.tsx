@@ -8,7 +8,7 @@ const faqs = [
     question: "What is QDtb?",
     answer: (
       <>
-        QDtb is an opinionated configuration for Neovim, PowerShell, and fish.
+        This is my opinionated configuration for Neovim, PowerShell, and fish.
       </>
     ),
     slug: "what-is-qdtb",
@@ -22,8 +22,8 @@ const faqs = [
     question: "Is this intended for public use?",
     answer: (
       <>
-        Not really, and I caution against blindly installing code that has shell
-        access like this. When Neovim plugins and PowerShell modules are ready
+        <b>Not really, and I caution against blindly installing code that has shell
+        access like this.</b> When Neovim plugins and PowerShell modules are ready
         for the public they will be published as seperate repositories to
         GitHub.
       </>
