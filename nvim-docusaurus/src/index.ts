@@ -28,6 +28,34 @@ import {
 import { generateSidebar } from "./sidebar.js";
 import type { ColorScheme } from "./types.js";
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+/**
+ * Check whether a doc file is manually managed (not auto-generated).
+ * A file is manual if it exists and does NOT contain `generated: true`
+ * in its YAML frontmatter.
+ */
+function isManualDoc(filePath: string): boolean {
+  if (!fs.existsSync(filePath)) return false;
+  const content = fs.readFileSync(filePath, "utf-8");
+  const fmMatch = content.match(/^---([\s\S]*?)---/);
+  if (!fmMatch) return true; // No frontmatter at all → treat as manual
+  return !fmMatch[1].includes("generated: true");
+}
+
+/**
+ * Write a generated doc file, but only if the path isn't occupied by a
+ * manually-managed document.
+ */
+function writeGeneratedFile(filePath: string, content: string): boolean {
+  if (isManualDoc(filePath)) {
+    console.log(`   ⏭️  Skipped (manual): ${path.basename(filePath)}`);
+    return false;
+  }
+  fs.writeFileSync(filePath, content);
+  return true;
+}
+
 // ── Plugin ───────────────────────────────────────────────────────────────────
 
 export default function nvimDocusaurusPlugin(
@@ -119,8 +147,9 @@ export default function nvimDocusaurusPlugin(
               const outDir = path.join(outputBase, "colors");
               fs.mkdirSync(outDir, { recursive: true });
               const outFile = path.join(outDir, `${mod.name}.mdx`);
-              fs.writeFileSync(outFile, generateColorSchemeMarkdown(scheme));
-              console.log(`   📝 Generated: colors/${mod.name}.mdx`);
+              if (writeGeneratedFile(outFile, generateColorSchemeMarkdown(scheme))) {
+                console.log(`   📝 Generated: colors/${mod.name}.mdx`);
+              }
             }
           }
         } else if (info.category === "config" && info.groupName === "index") {
@@ -128,19 +157,20 @@ export default function nvimDocusaurusPlugin(
           const outDir = path.join(outputBase, "config");
           fs.mkdirSync(outDir, { recursive: true });
 
-          fs.writeFileSync(
-            path.join(outDir, "init.md"),
-            generateInitConfigMarkdown(info.modules),
-          );
-          fs.writeFileSync(
-            path.join(outDir, "options.md"),
-            generateOptionsConfigMarkdown(info.modules),
-          );
-          fs.writeFileSync(
-            path.join(outDir, "keymaps.md"),
-            generateKeymapsConfigMarkdown(info.modules),
-          );
-          console.log(`   📝 Generated: config/{init,options,keymaps}.md`);
+          const configFiles = [
+            { name: "init.md", gen: generateInitConfigMarkdown },
+            { name: "options.md", gen: generateOptionsConfigMarkdown },
+            { name: "keymaps.md", gen: generateKeymapsConfigMarkdown },
+          ];
+          const written: string[] = [];
+          for (const { name, gen } of configFiles) {
+            if (writeGeneratedFile(path.join(outDir, name), gen(info.modules))) {
+              written.push(name);
+            }
+          }
+          if (written.length > 0) {
+            console.log(`   📝 Generated: config/{${written.join(",")}}`);  
+          }
         } else {
           const outDir = path.join(outputBase, info.category);
           fs.mkdirSync(outDir, { recursive: true });
@@ -158,18 +188,20 @@ export default function nvimDocusaurusPlugin(
             PLUGINS_TO_CONSOLIDATE.includes(info.groupName)
           ) {
             const outFile = path.join(outDir, `${info.groupName}.md`);
-            fs.writeFileSync(
+            if (writeGeneratedFile(
               outFile,
               generateConsolidatedModuleMarkdown(info.groupName, info.modules),
-            );
-            console.log(
-              `   📝 Generated: ${info.category}/${info.groupName}.md (consolidated)`,
-            );
+            )) {
+              console.log(
+                `   📝 Generated: ${info.category}/${info.groupName}.md (consolidated)`,
+              );
+            }
           } else if (!isFolder) {
             const mod = info.modules[0];
             const outFile = path.join(outDir, `${mod.name}.md`);
-            fs.writeFileSync(outFile, generateModuleMarkdown(mod));
-            console.log(`   📝 Generated: ${info.category}/${mod.name}.md`);
+            if (writeGeneratedFile(outFile, generateModuleMarkdown(mod))) {
+              console.log(`   📝 Generated: ${info.category}/${mod.name}.md`);
+            }
           } else {
             const groupDir = path.join(outDir, info.groupName);
             fs.mkdirSync(groupDir, { recursive: true });
@@ -177,36 +209,39 @@ export default function nvimDocusaurusPlugin(
             // Generate individual pages
             for (const mod of info.modules) {
               const outFile = path.join(groupDir, `${mod.name}.md`);
-              fs.writeFileSync(outFile, generateModuleMarkdown(mod));
-              console.log(
-                `   📝 Generated: ${info.category}/${info.groupName}/${mod.name}.md`,
-              );
+              if (writeGeneratedFile(outFile, generateModuleMarkdown(mod))) {
+                console.log(
+                  `   📝 Generated: ${info.category}/${info.groupName}/${mod.name}.md`,
+                );
+              }
             }
 
             // Generate index.md for the group
             const indexFile = path.join(groupDir, "index.md");
-            fs.writeFileSync(
+            if (writeGeneratedFile(
               indexFile,
               generateCategoryIndexMarkdown(
                 info.groupName,
                 info.modules,
                 info.category,
               ),
-            );
-            console.log(
-              `   📝 Generated: ${info.category}/${info.groupName}/index.md`,
-            );
+            )) {
+              console.log(
+                `   📝 Generated: ${info.category}/${info.groupName}/index.md`,
+              );
+            }
           }
         }
       }
 
       // Generate module index
       const modulesIndexFile = path.join(outputBase, "modules.md");
-      fs.writeFileSync(
+      if (writeGeneratedFile(
         modulesIndexFile,
         generateIndexMarkdown(groups, colorSchemes),
-      );
-      console.log(`   📝 Generated: modules.md`);
+      )) {
+        console.log(`   📝 Generated: modules.md`);
+      }
 
       // Generate sidebar data for the plugin
       const sidebarItems = generateSidebar(groups, colorSchemes);

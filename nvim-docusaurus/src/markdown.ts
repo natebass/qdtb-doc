@@ -62,6 +62,7 @@ export function generateModuleMarkdown(
     lines.push(`title: "${mod.moduleName || mod.name}"`);
     lines.push(`description: "${mod.summary}"`);
     lines.push(`sidebar_label: "${mod.name}"`);
+    lines.push("generated: true");
     lines.push("---");
     lines.push("");
   }
@@ -132,6 +133,7 @@ export function generateInitConfigMarkdown(modules: LuaModule[]): string {
     'description: "Neovim initialization, mini.nvim setup, and autocmds"',
   );
   lines.push('sidebar_label: "Init"');
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
   lines.push("# Initialization");
@@ -169,6 +171,7 @@ export function generateOptionsConfigMarkdown(modules: LuaModule[]): string {
   lines.push('title: "Options"');
   lines.push('description: "Neovim options and settings"');
   lines.push('sidebar_label: "Options"');
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
   lines.push("# Options");
@@ -189,6 +192,7 @@ export function generateKeymapsConfigMarkdown(modules: LuaModule[]): string {
   lines.push('title: "Keymaps"');
   lines.push('description: "Custom keybindings and mappings"');
   lines.push('sidebar_label: "Keymaps"');
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
   lines.push("# Keymaps");
@@ -221,6 +225,7 @@ export function generateCategoryIndexMarkdown(
   lines.push(`description: "Overview of ${displayName} configuration"`);
   lines.push(`sidebar_label: "${sidebarLabel}"`);
   lines.push(`sidebar_position: ${position}`);
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
   lines.push(`# ${displayName}`);
@@ -260,6 +265,7 @@ export function generateConsolidatedModuleMarkdown(
   lines.push(`description: "Documentation for the ${displayName} plugin"`);
   lines.push(`sidebar_label: "${displayName}"`);
   lines.push(`sidebar_position: ${position}`);
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
 
@@ -300,6 +306,7 @@ export function generateColorSchemeMarkdown(scheme: ColorScheme): string {
   lines.push(`title: "${scheme.displayName}"`);
   lines.push(`description: "${scheme.description}"`);
   lines.push(`sidebar_label: "${scheme.displayName}"`);
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
   lines.push(`import ColorPalette from '@site/src/components/ColorPalette';`);
@@ -375,6 +382,7 @@ export function generateIndexMarkdown(
   );
   lines.push("sidebar_label: Index");
   lines.push("sidebar_position: 999");
+  lines.push("generated: true");
   lines.push("---");
   lines.push("");
   lines.push("# QDtb Neovim Configuration");
