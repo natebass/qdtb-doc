@@ -19,7 +19,7 @@ const faqs = [
     slug: "ai",
   },
   {
-    question: "Is this configuration intended for public use?",
+    question: "Is this intended for public use?",
     answer: (
       <>
         Not really, and I caution against blindly installing code that has shell

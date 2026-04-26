@@ -5,9 +5,7 @@ export function generateSidebar(
   groups: GroupMap,
   colorSchemes: ColorScheme[],
 ): SidebarItem[] {
-  const sidebar: SidebarItem[] = [
-    { type: "doc", label: "Overview", id: "index" },
-  ];
+  const sidebar: SidebarItem[] = [{ type: "doc", id: "index" }];
 
   // Group by category
   const categoryGroups = new Map<string, string[]>();
@@ -28,55 +26,60 @@ export function generateSidebar(
     const conf = categoryConfig[cat] || { label: cat, emoji: "📄" };
 
     if (cat === "config") {
-      sidebar.push({
-        type: "doc",
-        label: `${conf.emoji} ${conf.label}`,
-        id: "docs/config",
-      });
+      sidebar.push({ type: "doc", id: "config/init" });
+      sidebar.push({ type: "doc", id: "config/options" });
+      sidebar.push({ type: "doc", id: "config/keymaps" });
       continue;
     }
 
     sidebar.push({
       type: "category",
       label: `${conf.emoji} ${conf.label}`,
-      items: groupKeys.sort().map((groupKey) => {
-        const info = groups.get(groupKey)!;
-        const groupName = info.groupName;
-        const displayName = groupName
-          .replace(/_/g, " ")
-          .replace(/\b\w/g, (c) => c.toUpperCase());
+      items: groupKeys
+        .sort((a, b) => {
+          const order = ["code_style", "fold_this", "session_manager", "qdtb"];
+          const idxA = order.indexOf(a);
+          const idxB = order.indexOf(b);
+          if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+          if (idxA !== -1) return -1;
+          if (idxB !== -1) return 1;
+          return a.localeCompare(b);
+        })
+        .map((groupKey) => {
+          const info = groups.get(groupKey)!;
+          const groupName = info.groupName;
+          const displayName = groupName
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
 
-        const isFolder =
-          (info.modules.length > 1 || info.modules[0].name !== groupName) &&
-          !(cat === "plugins" && PLUGINS_TO_CONSOLIDATE.includes(groupName));
+          const isFolder =
+            (info.modules.length > 1 || info.modules[0].name !== groupName) &&
+            !(cat === "plugins" && PLUGINS_TO_CONSOLIDATE.includes(groupName));
 
-        if (!isFolder) {
-          return {
-            type: "doc" as const,
-            label: displayName,
-            id: `${cat}/${groupName}`,
-          };
-        } else {
-          return {
-            type: "category",
-            label: displayName,
-            items: [
-              {
-                type: "doc" as const,
-                label: groupName === "QDtb" ? "QDTB" : "Overview",
-                id: `${cat}/${groupName}`,
-              },
-              ...info.modules
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((m) => ({
+          if (!isFolder) {
+            return {
+              type: "doc" as const,
+              id: `${cat}/${groupName}`,
+            };
+          } else {
+            return {
+              type: "category",
+              label: displayName,
+              items: [
+                {
                   type: "doc" as const,
-                  label: m.name,
-                  id: `${cat}/${groupName}/${m.name}`,
-                })),
-            ],
-          };
-        }
-      }),
+                  id: `${cat}/${groupName}`,
+                },
+                ...info.modules
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((m) => ({
+                    type: "doc" as const,
+                    id: `${cat}/${groupName}/${m.name}`,
+                  })),
+              ],
+            };
+          }
+        }),
     });
   }
 
@@ -89,11 +92,12 @@ export function generateSidebar(
         .sort((a, b) => a.displayName.localeCompare(b.displayName))
         .map((cs) => ({
           type: "doc" as const,
-          label: cs.displayName,
           id: `colors/${cs.name}`,
         })),
     });
   }
+
+  sidebar.push({ type: "doc", id: "modules" });
 
   return sidebar;
 }

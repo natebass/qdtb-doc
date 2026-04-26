@@ -1,7 +1,5 @@
 import type { LoadContext, Plugin } from "@docusaurus/types";
 
-// ── Lua Module Types ─────────────────────────────────────────────────────────
-
 export interface LuaFunction {
   name: string;
   summary: string;
@@ -11,6 +9,9 @@ export interface LuaFunction {
   lineNumber: number;
 }
 
+/**
+ * Categories are like config, plugins, or colors.
+ */
 export interface LuaModule {
   name: string;
   moduleName: string;
@@ -21,10 +22,8 @@ export interface LuaModule {
   functions: LuaFunction[];
   variables: { name: string; value: string; description: string }[];
   sourceCode: string;
-  category: string; // e.g. 'config', 'plugins', 'colors'
+  category: string;
 }
-
-// ── Color Types ──────────────────────────────────────────────────────────────
 
 export interface ColorInfo {
   name: string;
@@ -49,8 +48,6 @@ export interface ColorScheme {
   saturation: string | null;
 }
 
-// ── Plugin Types ─────────────────────────────────────────────────────────────
-
 export interface PluginOptions {
   QdtbPath?: string;
   outputDir?: string;
@@ -64,11 +61,9 @@ export interface GroupInfo {
 
 export type GroupMap = Map<string, GroupInfo>;
 
-// ── Sidebar Types ────────────────────────────────────────────────────────────
-
 export interface SidebarItem {
   type: string;
-  label: string;
+  label?: string;
   items?: SidebarItem[];
   id?: string;
 }

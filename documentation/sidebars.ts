@@ -5,12 +5,22 @@ const sidebars: SidebarsConfig = {
     {
       type: "doc",
       id: "index",
-      label: "Overview",
+      label: "Introduction",
     },
     {
       type: "doc",
-      id: "config/index",
-      label: "Core Configuration",
+      id: "config/init",
+      label: "Init",
+    },
+    {
+      type: "doc",
+      id: "config/options",
+      label: "Options",
+    },
+    {
+      type: "doc",
+      id: "config/keymaps",
+      label: "Keymaps",
     },
     {
       type: "category",
@@ -31,6 +41,11 @@ const sidebars: SidebarsConfig = {
           dirName: "colors",
         },
       ],
+    },
+    {
+      type: "doc",
+      id: "modules",
+      label: "Index",
     },
   ],
   powershellSidebar: [

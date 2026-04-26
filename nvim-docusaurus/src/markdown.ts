@@ -123,77 +123,79 @@ export function generateModuleMarkdown(
 
 // ── Consolidated Config Markdown ─────────────────────────────────────────────
 
-export function generateConsolidatedConfigMarkdown(
-  modules: LuaModule[],
-): string {
+export function generateInitConfigMarkdown(modules: LuaModule[]): string {
   const lines: string[] = [];
 
   lines.push("---");
-  lines.push('title: "Core Configuration"');
-  lines.push('description: "Consolidated core configuration for Neovim"');
-  lines.push('sidebar_label: "Core Configuration"');
+  lines.push('title: "Initialization"');
+  lines.push(
+    'description: "Neovim initialization, mini.nvim setup, and autocmds"',
+  );
+  lines.push('sidebar_label: "Init"');
   lines.push("---");
   lines.push("");
-  lines.push("# Core Configuration");
+  lines.push("# Initialization");
   lines.push("");
 
-  // Sort: init, mini, options, keymaps, then others
-  const order = ["init", "mini", "options", "keymaps"];
-  const sorted = [...modules].sort((a, b) => {
-    // Root init.lua should ALWAYS be first
+  const initOrder = ["init", "mini", "autocmds"];
+  const filtered = modules.filter((m) =>
+    ["init", "mini", "autocmds", "other"].includes(m.name),
+  );
+  const sorted = [...filtered].sort((a, b) => {
     if (a.relativePath === "init.lua") return -1;
     if (b.relativePath === "init.lua") return 1;
-
-    const idxA = order.indexOf(a.name);
-    const idxB = order.indexOf(b.name);
+    const idxA = initOrder.indexOf(a.name);
+    const idxB = initOrder.indexOf(b.name);
     if (idxA !== -1 && idxB !== -1) return idxA - idxB;
     if (idxA !== -1) return -1;
     if (idxB !== -1) return 1;
     return a.name.localeCompare(b.name);
   });
 
-  const initMods = sorted.filter((m) => m.name === "init");
-  const miniMod = sorted.find((m) => m.name === "mini");
-
-  if (initMods.length > 0 || miniMod) {
-    lines.push(`## Init & Mini`);
+  for (const mod of sorted) {
+    lines.push(generateModuleMarkdown(mod, 2, false));
     lines.push("");
-    const combined = [...initMods];
-    if (miniMod) combined.push(miniMod);
-
-    combined.forEach((mod) => {
-      lines.push(`### ${mod.moduleName || mod.name}`);
-      lines.push("");
-      if (mod.summary) {
-        lines.push(`> ${mod.summary}`);
-        lines.push("");
-      }
-
-      if (mod.functions.length > 0) {
-        lines.push(`#### Functions`);
-        lines.push("");
-        for (const fn of mod.functions) {
-          const paramStr = fn.params.map((p) => p.name).join(", ");
-          lines.push(`##### \`${fn.name}(${paramStr})\``);
-          lines.push("");
-          if (fn.summary) lines.push(fn.summary + "\n\n");
-        }
-      }
-
-      lines.push(
-        `[View Source on GitHub](https://github.com/natebass/QDtb/blob/master/${mod.relativePath})`,
-      );
-      lines.push("");
-    });
     lines.push("---");
     lines.push("");
   }
 
-  // Then others, but put keymaps last among the remaining ones if it exists
-  const remaining = sorted.filter(
-    (m) => m.name !== "init" && m.name !== "mini",
-  );
-  for (const mod of remaining) {
+  return lines.join("\n");
+}
+
+export function generateOptionsConfigMarkdown(modules: LuaModule[]): string {
+  const lines: string[] = [];
+
+  lines.push("---");
+  lines.push('title: "Options"');
+  lines.push('description: "Neovim options and settings"');
+  lines.push('sidebar_label: "Options"');
+  lines.push("---");
+  lines.push("");
+  lines.push("# Options");
+  lines.push("");
+
+  const mod = modules.find((m) => m.name === "options");
+  if (mod) {
+    lines.push(generateModuleMarkdown(mod, 2, false));
+  }
+
+  return lines.join("\n");
+}
+
+export function generateKeymapsConfigMarkdown(modules: LuaModule[]): string {
+  const lines: string[] = [];
+
+  lines.push("---");
+  lines.push('title: "Keymaps"');
+  lines.push('description: "Custom keybindings and mappings"');
+  lines.push('sidebar_label: "Keymaps"');
+  lines.push("---");
+  lines.push("");
+  lines.push("# Keymaps");
+  lines.push("");
+
+  const mod = modules.find((m) => m.name === "keymaps");
+  if (mod) {
     lines.push(generateModuleMarkdown(mod, 2, false));
   }
 
@@ -212,11 +214,13 @@ export function generateCategoryIndexMarkdown(
   const displayName = toDisplayName(groupName);
   const sidebarLabel = groupName === "qdtb" ? "Miscellaneous" : "Overview";
 
+  const position = groupName === "qdtb" ? 40 : 1;
+
   lines.push("---");
   lines.push(`title: "${displayName}"`);
   lines.push(`description: "Overview of ${displayName} configuration"`);
   lines.push(`sidebar_label: "${sidebarLabel}"`);
-  lines.push(`sidebar_position: 1`);
+  lines.push(`sidebar_position: ${position}`);
   lines.push("---");
   lines.push("");
   lines.push(`# ${displayName}`);
@@ -244,10 +248,18 @@ export function generateConsolidatedModuleMarkdown(
   const lines: string[] = [];
   const displayName = toDisplayName(groupName);
 
+  const positions: Record<string, number> = {
+    code_style: 10,
+    fold_this: 20,
+    session_manager: 30,
+  };
+  const position = positions[groupName] || 50;
+
   lines.push("---");
   lines.push(`title: "${displayName}"`);
   lines.push(`description: "Documentation for the ${displayName} plugin"`);
   lines.push(`sidebar_label: "${displayName}"`);
+  lines.push(`sidebar_position: ${position}`);
   lines.push("---");
   lines.push("");
 
@@ -298,6 +310,25 @@ export function generateColorSchemeMarkdown(scheme: ColorScheme): string {
   lines.push(`> ${scheme.description}`);
   lines.push("");
 
+  // All extracted colors
+  if (scheme.allColors.length > 0) {
+    const colorsJson = JSON.stringify(scheme.allColors);
+    lines.push("## Color Palette");
+    lines.push("");
+    lines.push(`<ColorPalette colors={${colorsJson}} />`);
+    lines.push("");
+  }
+
+  // Color palette component
+  if (scheme.bgDark && scheme.fgDark) {
+    lines.push("## Preview");
+    lines.push("");
+    lines.push(
+      `<ColorPreview bgDark="${scheme.bgDark}" bgLight="${scheme.bgLight || "#e5e5e5"}" fgDark="${scheme.fgDark}" fgLight="${scheme.fgLight || "#333333"}" name="${scheme.displayName}" />`,
+    );
+    lines.push("");
+  }
+
   // Theme metadata
   if (scheme.accent || scheme.saturation) {
     lines.push("## Theme Properties");
@@ -315,25 +346,6 @@ export function generateColorSchemeMarkdown(scheme: ColorScheme): string {
       lines.push(`| Foreground (Dark) | \`${scheme.fgDark}\` |`);
     if (scheme.fgLight)
       lines.push(`| Foreground (Light) | \`${scheme.fgLight}\` |`);
-    lines.push("");
-  }
-
-  // Color palette component
-  if (scheme.bgDark && scheme.fgDark) {
-    lines.push("## Preview");
-    lines.push("");
-    lines.push(
-      `<ColorPreview bgDark="${scheme.bgDark}" bgLight="${scheme.bgLight || "#e5e5e5"}" fgDark="${scheme.fgDark}" fgLight="${scheme.fgLight || "#333333"}" name="${scheme.displayName}" />`,
-    );
-    lines.push("");
-  }
-
-  // All extracted colors
-  if (scheme.allColors.length > 0) {
-    const colorsJson = JSON.stringify(scheme.allColors);
-    lines.push("## Color Palette");
-    lines.push("");
-    lines.push(`<ColorPalette colors={${colorsJson}} />`);
     lines.push("");
   }
 
@@ -357,12 +369,12 @@ export function generateIndexMarkdown(
   const lines: string[] = [];
 
   lines.push("---");
-  lines.push('title: "Neovim Configuration"');
+  lines.push('title: "Module Index"');
   lines.push(
-    'description: "Complete documentation for the QDtb Neovim configuration"',
+    'description: "Overview of all modules in the QDtb Neovim configuration"',
   );
-  lines.push("sidebar_position: 1");
-  lines.push("slug: /");
+  lines.push("sidebar_label: Index");
+  lines.push("sidebar_position: 999");
   lines.push("---");
   lines.push("");
   lines.push("# QDtb Neovim Configuration");

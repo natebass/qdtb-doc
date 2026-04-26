@@ -17,7 +17,9 @@ import {
 } from "./files.js";
 import {
   generateModuleMarkdown,
-  generateConsolidatedConfigMarkdown,
+  generateInitConfigMarkdown,
+  generateOptionsConfigMarkdown,
+  generateKeymapsConfigMarkdown,
   generateCategoryIndexMarkdown,
   generateConsolidatedModuleMarkdown,
   generateColorSchemeMarkdown,
@@ -48,7 +50,7 @@ export default function nvimDocusaurusPlugin(
           fs.rmSync(p, { recursive: true, force: true });
         }
       });
-      ["index.md", "_sidebar.json"].forEach((file) => {
+      ["_sidebar.json"].forEach((file) => {
         const p = path.join(outputBase, file);
         if (fs.existsSync(p)) {
           fs.unlinkSync(p);
@@ -122,15 +124,23 @@ export default function nvimDocusaurusPlugin(
             }
           }
         } else if (info.category === "config" && info.groupName === "index") {
-          // Consolidated core configuration
+          // Break down core configuration
           const outDir = path.join(outputBase, "config");
           fs.mkdirSync(outDir, { recursive: true });
-          const outFile = path.join(outDir, `index.md`);
+
           fs.writeFileSync(
-            outFile,
-            generateConsolidatedConfigMarkdown(info.modules),
+            path.join(outDir, "init.md"),
+            generateInitConfigMarkdown(info.modules),
           );
-          console.log(`   📝 Generated: config/index.md (consolidated)`);
+          fs.writeFileSync(
+            path.join(outDir, "options.md"),
+            generateOptionsConfigMarkdown(info.modules),
+          );
+          fs.writeFileSync(
+            path.join(outDir, "keymaps.md"),
+            generateKeymapsConfigMarkdown(info.modules),
+          );
+          console.log(`   📝 Generated: config/{init,options,keymaps}.md`);
         } else {
           const outDir = path.join(outputBase, info.category);
           fs.mkdirSync(outDir, { recursive: true });
@@ -190,10 +200,13 @@ export default function nvimDocusaurusPlugin(
         }
       }
 
-      // Generate index
-      const indexFile = path.join(outputBase, "index.md");
-      fs.writeFileSync(indexFile, generateIndexMarkdown(groups, colorSchemes));
-      console.log(`   📝 Generated: index.md`);
+      // Generate module index
+      const modulesIndexFile = path.join(outputBase, "modules.md");
+      fs.writeFileSync(
+        modulesIndexFile,
+        generateIndexMarkdown(groups, colorSchemes),
+      );
+      console.log(`   📝 Generated: modules.md`);
 
       // Generate sidebar data for the plugin
       const sidebarItems = generateSidebar(groups, colorSchemes);

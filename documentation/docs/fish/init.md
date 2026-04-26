@@ -1,8 +1,8 @@
 ---
 title: "fish"
 description: "init module"
-sidebar_label: "Fish"
-sidebar_position: 1
+sidebar_label: "Init"
+sidebar_position: 2
 ---
 
 # init

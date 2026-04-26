@@ -1,3 +1,10 @@
+---
+title: "Fish Shell Configuration"
+description: "Introduction to Fish shell setup"
+sidebar_label: "Intro"
+sidebar_position: 1
+---
+
 # Fish Shell Configuration
 
 Welcome to the Fish shell documentation section. Here you can find information about my Fish setup, functions, and abbreviations.
