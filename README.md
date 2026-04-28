@@ -1,4 +1,4 @@
-# QDtb Neovim configuration documentation
+# Neovim configuration documentation
 
 This repository contains the _documentation_ for my personal Neovim configuration.
 
