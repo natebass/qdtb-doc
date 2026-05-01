@@ -9,7 +9,6 @@ This repository contains the _documentation_ for my personal Neovim configuratio
 ## Prerequisites
 
 - Lua
-- LuaRocks
 - LDoc
 - Node.js
 - PNPM

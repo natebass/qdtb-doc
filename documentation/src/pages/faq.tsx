@@ -63,8 +63,7 @@ const faqs = [
           https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy.
         </li>
         <li>
-          Other plugins (custom and third-party) do not track users or collect
-          data.
+          Other plugins do not track users or collect data. But I can only speak for mine, see
         </li>
       </ul>
     ),
@@ -74,8 +73,7 @@ const faqs = [
     question: "Security",
     answer: (
       <>
-        If you notice any security concerns (like if I leaked my credentials) I
-        would appreciate it if you emailed me at nate.bass@outlook.com.
+        If you notice a security concern, I would appreciate it if you emailed me at nate.bass@outlook.com.
       </>
     ),
     slug: "security",
